@@ -8,7 +8,7 @@ local shootButton = 1
 -- player actions, timer and score.
 ]]--
 function Game:load()
-	math.randomseed(os.time()) --random number seeding is required
+	math.randomseed(os.time()) -- random number seeding is required to position targets
 	
 	self.target = {}
 	self.target.radius = 50
@@ -21,6 +21,9 @@ function Game:load()
 	self.reloadTime = 0
 	self.reloadDuration = 0.5
 	self.reloading = false
+	self.inCoolDown = false
+	self.coolDownDuration = 0.3
+	self.coolDownTime = 0
 	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end) 
 	self.initialTime = love.timer.getTime()
 	self.font = love.graphics.newFont(40)
@@ -28,14 +31,14 @@ end
 
 -- TARGET HANDLERS --
 
---positions target at a random point within the window
+-- positions target at a random point within the window
 function Game:positionTarget()
 	x = math.random(self.target.radius, love.graphics.getWidth() - self.target.radius)
 	y = math.random(self.target.radius, love.graphics.getHeight() - self.target.radius)
 	return x, y
 end
 
---calculates the distance from the mouse click and the centre of the target
+-- calculates the distance from the mouse click and the centre of the target
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
 	return math.sqrt( math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2) )
 end
@@ -47,14 +50,24 @@ end
 -- The player cannot shoot while reloading or when out of ammo.
 -- If the player hits the target, the score is incremented
 -- Every time the player shoots the ammo counter is decremented
-]]-- 
+]]--
+function Game:playerCanShoot(button)
+	if button == shootButton and self.ammo > 0
+			and self.reloading == false and self.inCoolDown == false then
+		return true
+	end
+	return false
+end
+
 function Game:shoot( x, y, button)
-	if button == shootButton and self.ammo > 0 and self.reloading == false then
+	if Game:playerCanShoot(button) then
 		if self:distanceBetween(x, y, self.target.x, self.target.y) <= self.target.radius then
 			self.score = self.score + 1
 			self.target.x, self.target.y = self:positionTarget()
 		end
 		self.ammo = self.ammo - 1
+		self.inCoolDown = true
+		self.coolDownTime = self.coolDownDuration
 	end
 end
 
@@ -84,14 +97,25 @@ function Game:decreaseReloadTime(dt)
 	end
 end
 
+-- to add some realism there is a slight cool down between each shot
+function Game:decreaseCoolDown(dt)
+	if self.inCoolDown then
+		self.coolDownTime = self.coolDownTime - dt
+		if self.coolDownTime <= 0 then
+			self.inCoolDown = false
+		end
+	end
+end
+
 function Game:update(dt)
 	self.timer:update(dt)
 	self:decreaseReloadTime(dt)
+	self:decreaseCoolDown(dt)
 end
 
 -- DRAW FUNCTIONS --
 
---nothing special here yet, everything about how the game looks is basically a placeholder 
+-- nothing special here yet, everything about how the game looks is basically a placeholder 
 
 function Game:drawGameTarget()
 	love.graphics.setColor(love.math.colorFromBytes(0, 153, 0))
