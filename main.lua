@@ -1,8 +1,9 @@
 local Game = require("game")
 
 --[[ TODO ]]--
--- Make it pretty
 -- Add multiple targets
+-- Add varying size targets
+-- scale scoring based on proximity of click to bullseye
 -- Targets disappear after a time
 -- Menu screen when the game starts
 -- Crosshair
@@ -13,6 +14,11 @@ local Game = require("game")
 	-- Overall score should be tracked between levels
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add sounds (gunshot, reload, ricochets)
+-- Make it pretty
+	-- Add a nice font for the hud
+	-- Have ammo graphic rather than a text counter
+	-- Make the targets look like targets
+	-- Add a background
 
 -- MAIN FUNCTIONS --
 
@@ -47,11 +53,8 @@ function love.mousepressed( x, y, button, istouch, presses )
 end
 
 function love.keypressed(key)
-	if gameState == 0 then
-		Game:reload(key)
-	end
-	
 	if key == "escape" then -- placeholder to close the game while testing
 		love.event.quit()
 	end
 end
+

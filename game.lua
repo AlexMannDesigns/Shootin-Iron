@@ -18,9 +18,8 @@ function Game:load()
 	self.seconds = 0
 	self.ammoCap = 6
 	self.ammo = self.ammoCap
-	self.reloadTime = 0
+	self.reloadKeyDown = 0
 	self.reloadDuration = 0.5
-	self.reloading = false
 	self.inCoolDown = false
 	self.coolDownDuration = 0.3
 	self.coolDownTime = 0
@@ -78,21 +77,12 @@ end
 -- cancelled by pressing the button again and then the player can continue shooting
 -- with a partially empty gun
 ]]--
-function Game:reload(key)
-	if key == reloadKey and self.reloading == false then
-		self.reloadTime = self.reloadDuration * (self.ammoCap - self.ammo)
-		self.reloading = true
-	elseif key == reloadKey then
-		self.reloading = false
-	end
-end
-
-function Game:decreaseReloadTime(dt)
-	if self.reloading then
-		self.reloadTime = self.reloadTime - dt
-		self.ammo = math.floor(self.ammoCap - (self.reloadTime / self.reloadDuration))
-		if self.reloadTime <= 0 then
-			self.reloading = false
+function Game:reload(dt)
+	if self.reloading and self.ammo < self.ammoCap then
+		self.reloadKeyDown = self.reloadKeyDown + dt
+		if self.reloadKeyDown >= self.reloadDuration then
+			self.ammo = self.ammo + 1
+			self.reloadKeyDown = 0
 		end
 	end
 end
@@ -109,8 +99,9 @@ end
 
 function Game:update(dt)
 	self.timer:update(dt)
-	self:decreaseReloadTime(dt)
+	self:reload(dt)
 	self:decreaseCoolDown(dt)
+	self.reloading = love.keyboard.isDown(reloadKey)
 end
 
 -- DRAW FUNCTIONS --
