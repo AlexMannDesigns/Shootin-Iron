@@ -14,7 +14,6 @@ function Game:load()
 	self.seconds = 0
 	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end) 
 	self.initialTime = love.timer.getTime()
-	self.font = love.graphics.newFont(40)
 end
 
 -- TARGET HANDLERS --
@@ -53,17 +52,8 @@ function Game:drawGameTarget()
 	love.graphics.circle("fill", self.target.x, self.target.y, self.target.radius)
 end
 
-function Game:drawGameHud()
-	love.graphics.setColor(1, 1, 1)
-	love.graphics.setFont(self.font)
-	love.graphics.print("Score:", 0, 0)
-	love.graphics.print(self.score, 150, 2)
-	love.graphics.print(self.seconds, love.graphics.getWidth() - 150, 2)
-end
-
 function Game:draw()
 	self:drawGameTarget()
-	self:drawGameHud()
 end
 
 return Game

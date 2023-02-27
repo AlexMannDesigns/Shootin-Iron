@@ -71,8 +71,6 @@ function Gun:update(dt)
 end
 
 function Gun:draw()
-	love.graphics.print("Ammo:", 250, 0)
-	love.graphics.print(self.ammo, 400, 2)
 end
 
 return Gun

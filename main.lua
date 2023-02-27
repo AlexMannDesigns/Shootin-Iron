@@ -1,5 +1,6 @@
 local Game = require("game")
 local Gun = require("gun")
+local Hud = require("hud")
 
 --[[ TODO ]]--
 -- Add multiple targets
@@ -29,6 +30,7 @@ function love.load()
 	if gameState == 0 then
 		Game:load()
 		Gun:load()	
+		Hud:load()
 	end
 end
 
@@ -37,6 +39,7 @@ function love.update(dt)
 	if gameState == 0 then
 		Game:update(dt)
 		Gun:update(dt)
+		Hud:update(dt)
 	end
 end
 
@@ -45,6 +48,7 @@ function love.draw()
 	if gameState == 0 then
 		Game:draw()
 		Gun:draw()
+		Hud:draw()
 	end
 end
 
