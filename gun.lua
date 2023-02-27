@@ -1,5 +1,4 @@
 local Game = require("game")
-local Keys = require("keys")
 local Gun = {}
 
 

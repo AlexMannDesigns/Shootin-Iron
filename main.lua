@@ -2,6 +2,12 @@ local Game = require("game")
 local Gun = require("gun")
 local Hud = require("hud")
 
+--Keys object can be global for now...
+Keys = {}
+
+Keys.reloadKey = "space"
+Keys.shootButton = 1
+
 --[[ TODO ]]--
 -- Add multiple targets
 -- Add varying size targets
