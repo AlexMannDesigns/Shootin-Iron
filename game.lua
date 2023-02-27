@@ -10,9 +10,13 @@ local targets = {}
 ]]--
 function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
-	
-	self.numberOfTargets = 4
-	self:createTargets()
+
+	self.targetCoolDownTime = 2
+	self.targetCoolDown = self.targetCoolDownTime
+	self.minTargets = 1
+	self.maxTargets = 6
+	self.minRadius = 30
+	self.maxRadius = 70
 	self.score = 0
 	self.seconds = 0
 	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end) 
@@ -29,18 +33,24 @@ end
 
 function Game:addTarget()
 	targets[#targets+1] = {
-		radius = 50,
+		radius = math.random(self.minRadius, self.maxRadius),
 		x = 0,
 		y = 0
 	}
 	self:positionTarget(targets[#targets])
 end
 	
-function Game:createTargets()
+function Game:createTargets(dt)
+	local numberOfTargets = math.random(self.minTargets, self.maxTargets) 
 	if #targets == 0 then
-		for i=1,self.numberOfTargets,1
-		do
-			self:addTarget()
+		if self.targetCoolDown > 0 then
+			self.targetCoolDown = self.targetCoolDown - dt
+		else
+			for i=1,numberOfTargets,1
+			do
+				self:addTarget()
+			end
+			self.targetCoolDown = self.targetCoolDownTime
 		end
 	end
 end
@@ -63,7 +73,7 @@ end
 
 function Game:update(dt)
 	self.timer:update(dt)
-	self:createTargets()
+	self:createTargets(dt)
 end
 
 -- DRAW FUNCTIONS --
