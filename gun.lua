@@ -1,8 +1,7 @@
 local Game = require("game")
-
+local Keys = require("keys")
 local Gun = {}
-local reloadKey = "space"
-local shootButton = 1
+
 
 function Gun:load()
 	self.ammoCap = 6
@@ -21,7 +20,7 @@ end
 -- Every time the player shoots the ammo counter is decremented
 ]]--
 function Gun:playerCanShoot(button)
-	if button == shootButton and self.ammo > 0
+	if button == Keys.shootButton and self.ammo > 0
 			and self.reloading == false and self.inCoolDown == false then
 		return true
 	end
@@ -67,7 +66,7 @@ end
 function Gun:update(dt)
 	self:reload(dt)
 	self:decreaseCoolDown(dt)
-	self.reloading = love.keyboard.isDown("space")
+	self.reloading = love.keyboard.isDown(Keys.reloadKey)
 end
 
 function Gun:draw()
