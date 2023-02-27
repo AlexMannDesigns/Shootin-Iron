@@ -1,15 +1,18 @@
 local cron = require 'cron'
 local Game = {}
 
+local targets = {}
+
+
 --[[
 -- The Game class tracks the positioning and drawing of the targets and the
 -- player actions, timer and score.
 ]]--
 function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
-	self.target = {}
-	self.target.radius = 50
-	self.target.x, self.target.y = self:positionTarget()
+	
+	self.numberOfTargets = 4
+	self:createTargets()
 	self.score = 0
 	self.seconds = 0
 	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end) 
@@ -19,10 +22,27 @@ end
 -- TARGET HANDLERS --
 
 -- positions target at a random point within the window
-function Game:positionTarget()
-	x = math.random(self.target.radius, love.graphics.getWidth() - self.target.radius)
-	y = math.random(self.target.radius, love.graphics.getHeight() - self.target.radius)
-	return x, y
+function Game:positionTarget(target)
+	target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
+	target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+end
+
+function Game:addTarget()
+	targets[#targets+1] = {
+		radius = 50,
+		x = 0,
+		y = 0
+	}
+	self:positionTarget(targets[#targets])
+end
+	
+function Game:createTargets()
+	if #targets == 0 then
+		for i=1,self.numberOfTargets,1
+		do
+			self:addTarget()
+		end
+	end
 end
 
 -- calculates the distance from the mouse click and the centre of the target
@@ -31,29 +51,35 @@ function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
 end
 	
 function Game:checkHit(x, y)
-	if self:distanceBetween(x, y, self.target.x, self.target.y) <= self.target.radius then
-		self.score = self.score + 1
-		self.target.x, self.target.y = self:positionTarget()
+	for i=1,#targets,1
+	do
+		if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius then
+			self.score = self.score + 1
+			table.remove(targets, i)
+			return 
+		end
 	end
 end
 
--- PLAYER ACTION HANDLERS --
-
 function Game:update(dt)
 	self.timer:update(dt)
+	self:createTargets()
 end
 
 -- DRAW FUNCTIONS --
 
 -- nothing special here yet, everything about how the game looks is basically a placeholder 
 
-function Game:drawGameTarget()
+function Game:drawGameTargets()
 	love.graphics.setColor(love.math.colorFromBytes(0, 153, 0))
-	love.graphics.circle("fill", self.target.x, self.target.y, self.target.radius)
+	for i=1,#targets,1
+	do
+		love.graphics.circle("fill", targets[i].x, targets[i].y, targets[i].radius)
+	end
 end
 
 function Game:draw()
-	self:drawGameTarget()
+	self:drawGameTargets()
 end
 
 return Game
