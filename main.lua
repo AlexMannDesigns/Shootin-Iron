@@ -1,4 +1,5 @@
 local Game = require("game")
+local Gun = require("gun")
 
 --[[ TODO ]]--
 -- Add multiple targets
@@ -27,6 +28,7 @@ function love.load()
 	gameState = 0
 	if gameState == 0 then
 		Game:load()
+		Gun:load()	
 	end
 end
 
@@ -34,6 +36,7 @@ end
 function love.update(dt)
 	if gameState == 0 then
 		Game:update(dt)
+		Gun:update(dt)
 	end
 end
 
@@ -41,6 +44,7 @@ end
 function love.draw()
 	if gameState == 0 then
 		Game:draw()
+		Gun:draw()
 	end
 end
 
@@ -48,7 +52,7 @@ end
 
 function love.mousepressed( x, y, button, istouch, presses )
 	if gameState == 0 then
-		Game:shoot(x, y, button)
+		Gun:shoot(x, y, button)
 	end
 end
 
