@@ -7,15 +7,14 @@ Keys = {}
 
 Keys.reloadKey = "space"
 Keys.shootButton = 1
+Keys.aimButton = 2
 
 --[[ TODO ]]--
--- Add multiple targets
--- Add varying size targets
--- scale scoring based on proximity of click to bullseye
--- Targets disappear after a time
--- Menu screen when the game starts
 -- Crosshair
 -- Aim-wobble (left-click to hold breath and steady)
+-- Targets disappear after a time
+-- scale scoring based on proximity of click to bullseye
+-- Menu screen when the game starts
 -- Add level system
 	-- Timer should count down, rather than up
 	-- Introduce more difficulty (more targets, less time)
@@ -60,7 +59,7 @@ end
 
 -- KEY HANDLERS --
 
-function love.mousepressed( x, y, button, istouch, presses )
+function love.mousepressed(x, y, button, istouch, presses)
 	if gameState == 0 then
 		Gun:shoot(x, y, button)
 	end
