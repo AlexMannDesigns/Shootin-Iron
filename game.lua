@@ -13,6 +13,8 @@ function Game:load()
 
 	self.targetCoolDownTime = 2
 	self.targetCoolDown = self.targetCoolDownTime
+	self.targetTimer = 3 
+	self.targetCurrentTime = 0
 	self.minTargets = 1
 	self.maxTargets = 6
 	self.minRadius = 30
@@ -39,15 +41,17 @@ function Game:addTarget()
 	}
 	self:positionTarget(targets[#targets])
 end
-	
+
+--creates targets when there are none present. Ticks down the cool down timer
+--before next targets are created
 function Game:createTargets(dt)
 	local numberOfTargets = math.random(self.minTargets, self.maxTargets) 
 	if #targets == 0 then
+		self.targetCurrentTime = 0
 		if self.targetCoolDown > 0 then
 			self.targetCoolDown = self.targetCoolDown - dt
 		else
-			for i=1,numberOfTargets,1
-			do
+			for i=1,numberOfTargets,1 do
 				self:addTarget()
 			end
 			self.targetCoolDown = self.targetCoolDownTime
@@ -55,14 +59,32 @@ function Game:createTargets(dt)
 	end
 end
 
+function Game:removeTargets()
+	if self.targetCurrentTime >= self.targetTimer then
+		for i=1,#targets,1 do
+			table.remove(targets)
+		end
+		self.targetCurrentTime = 0
+	end
+end
+
+function Game:incrementTargetTimer(dt)
+	if #targets > 0 then
+		self.targetCurrentTime = self.targetCurrentTime + dt
+		if self.targetCurrentTime >= self.targetTimer then
+			self:removeTargets()
+		end
+	end
+end
+
+
 -- calculates the distance from the mouse click and the centre of the target
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
 	return math.sqrt( math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2) )
 end
 	
 function Game:checkHit(x, y)
-	for i=1,#targets,1
-	do
+	for i=1,#targets,1 do
 		if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius then
 			self.score = self.score + 1
 			table.remove(targets, i)
@@ -72,8 +94,10 @@ function Game:checkHit(x, y)
 end
 
 function Game:update(dt)
+	print(self.targetCurrentTime)
 	self.timer:update(dt)
 	self:createTargets(dt)
+	self:incrementTargetTimer(dt)
 end
 
 -- DRAW FUNCTIONS --

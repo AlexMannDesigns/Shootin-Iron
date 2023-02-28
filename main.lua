@@ -10,8 +10,6 @@ Keys.shootButton = 1
 Keys.aimButton = 2
 
 --[[ TODO ]]--
--- Crosshair
--- Aim-wobble (left-click to hold breath and steady)
 -- Targets disappear after a time
 -- scale scoring based on proximity of click to bullseye
 -- Menu screen when the game starts
@@ -26,6 +24,7 @@ Keys.aimButton = 2
 	-- Have ammo graphic rather than a text counter
 	-- Make the targets look like targets
 	-- Add a background
+	-- Add a crosshair
 
 -- MAIN FUNCTIONS --
 
