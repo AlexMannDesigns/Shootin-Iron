@@ -8,6 +8,10 @@ local lg = love.graphics
 local bullseye = 0.1
 local inner = 0.4
 local outer = 0.8
+local bullseyePoints = 100
+local innerPoints = 50
+local outerPoints = 20
+local targetPoints = 10
 
 --[[
 -- The Game class tracks the positioning and drawing of the targets and the
@@ -84,21 +88,37 @@ end
 
 -- calculates the distance from the mouse click and the centre of the target
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
-	return math.sqrt( math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2) )
+	return math.sqrt(math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2)) 
+end
+
+function Game:targetHit(x, y, i)
+	return self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius
+end
+
+function Game:bullseyeHit(x, y, i)
+	return self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * bullseye
+end
+
+function Game:innerHit(x, y, i)
+	return self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * inner
+end
+
+function Game:outerHit(x, y, i)
+	return self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * outer
 end
 
 -- the score scales depending on which "ring" of the target was hit
 function Game:checkHit(x, y)
 	for i=#targets, 1, -1 do
-		if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius then
-			if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * bullseye then
-				self.score = self.score + 100
-			elseif self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * inner then
-				self.score = self.score + 50
-			elseif self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * outer then
-				self.score = self.score + 20
+		if self:targetHit(x, y, i) then
+			if self:bullseyeHit(x, y, i) then
+				self.score = self.score + bullseyePoints 
+			elseif self:innerHit(x, y, i) then
+				self.score = self.score + innerPoints
+			elseif self:outerHit(x, y, i) then
+				self.score = self.score + outerPoints
 			else
-				self.score = self.score + 10
+				self.score = self.score + targetPoints
 			end
 			table.remove(targets, i)
 			return 
