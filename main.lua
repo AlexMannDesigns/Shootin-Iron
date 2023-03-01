@@ -10,7 +10,7 @@ Keys.shootButton = 1
 Keys.aimButton = 2
 
 --[[ TODO ]]--
--- Targets disappear after a time
+-- look up how to set colours in a more readable fashion
 -- scale scoring based on proximity of click to bullseye
 -- Menu screen when the game starts
 -- Add level system
@@ -18,10 +18,9 @@ Keys.aimButton = 2
 	-- Introduce more difficulty (more targets, less time)
 	-- Overall score should be tracked between levels
 -- Power ups (faster reload, higher capacity, rapid fire)
--- Add sounds (gunshot, reload, ricochets)
+-- Add sounds (gunshot, reload, ricochets, hammer click)
 -- Make it pretty
 	-- Add a nice font for the hud
-	-- Have ammo graphic rather than a text counter
 	-- Make the targets look like targets
 	-- Add a background
 	-- Add a crosshair

@@ -3,6 +3,7 @@ local Game = {}
 
 local targets = {}
 
+local lg = love.graphics
 
 --[[
 -- The Game class tracks the positioning and drawing of the targets and the
@@ -15,8 +16,8 @@ function Game:load()
 	self.targetCoolDown = self.targetCoolDownTime
 	self.targetTimer = 3 
 	self.targetCurrentTime = 0
-	self.minTargets = 1
-	self.maxTargets = 6
+	self.minTargets = 1 
+	self.maxTargets = 6 
 	self.minRadius = 30
 	self.maxRadius = 70
 	self.score = 0
@@ -29,8 +30,8 @@ end
 
 -- positions target at a random point within the window
 function Game:positionTarget(target)
-	target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
-	target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+	target.x = math.random(target.radius, lg.getWidth() - target.radius)
+	target.y = math.random(target.radius, lg.getHeight() - target.radius)
 end
 
 function Game:addTarget()
@@ -77,14 +78,13 @@ function Game:incrementTargetTimer(dt)
 	end
 end
 
-
 -- calculates the distance from the mouse click and the centre of the target
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
 	return math.sqrt( math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2) )
 end
 	
 function Game:checkHit(x, y)
-	for i=1,#targets,1 do
+	for i=#targets, 1, -1 do
 		if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius then
 			self.score = self.score + 1
 			table.remove(targets, i)
@@ -94,7 +94,6 @@ function Game:checkHit(x, y)
 end
 
 function Game:update(dt)
-	print(self.targetCurrentTime)
 	self.timer:update(dt)
 	self:createTargets(dt)
 	self:incrementTargetTimer(dt)
@@ -105,10 +104,13 @@ end
 -- nothing special here yet, everything about how the game looks is basically a placeholder 
 
 function Game:drawGameTargets()
-	love.graphics.setColor(love.math.colorFromBytes(0, 153, 0))
-	for i=1,#targets,1
-	do
-		love.graphics.circle("fill", targets[i].x, targets[i].y, targets[i].radius)
+	for i=1,#targets,1 do
+		lg.setColor(love.math.colorFromBytes(0, 153, 0))
+		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius)
+		lg.setColor(1, 1, 1)
+		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * 0.8)
+		lg.setColor(love.math.colorFromBytes(0, 153, 0))
+		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * 0.4)
 	end
 end
 
