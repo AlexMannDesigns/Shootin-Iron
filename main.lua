@@ -11,7 +11,7 @@ Keys.aimButton = 2
 
 --[[ TODO ]]--
 -- look up how to set colours in a more readable fashion
--- scale scoring based on proximity of click to bullseye
+-- make hud transparent when crosshair is over it
 -- Menu screen when the game starts
 -- Add level system
 	-- Timer should count down, rather than up

@@ -1,9 +1,13 @@
 local cron = require 'cron'
+local Colours = require("colours")
 local Game = {}
 
 local targets = {}
 
 local lg = love.graphics
+local bullseye = 0.1
+local inner = 0.4
+local outer = 0.8
 
 --[[
 -- The Game class tracks the positioning and drawing of the targets and the
@@ -82,11 +86,20 @@ end
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
 	return math.sqrt( math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2) )
 end
-	
+
+-- the score scales depending on which "ring" of the target was hit
 function Game:checkHit(x, y)
 	for i=#targets, 1, -1 do
 		if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius then
-			self.score = self.score + 1
+			if self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * bullseye then
+				self.score = self.score + 100
+			elseif self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * inner then
+				self.score = self.score + 50
+			elseif self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * outer then
+				self.score = self.score + 20
+			else
+				self.score = self.score + 10
+			end
 			table.remove(targets, i)
 			return 
 		end
@@ -105,12 +118,14 @@ end
 
 function Game:drawGameTargets()
 	for i=1,#targets,1 do
-		lg.setColor(love.math.colorFromBytes(0, 153, 0))
+		Colours:set(Colours.green)
 		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius)
-		lg.setColor(1, 1, 1)
-		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * 0.8)
-		lg.setColor(love.math.colorFromBytes(0, 153, 0))
-		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * 0.4)
+		Colours:set(Colours.white)
+		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * outer)
+		Colours:set(Colours.green)
+		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * inner)
+		Colours:set(Colours.white)
+		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * bullseye)
 	end
 end
 

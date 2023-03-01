@@ -1,5 +1,6 @@
 local Game = require("game")
 local Gun = require("gun")
+local Colours = require("colours")
 
 local Hud = {}
 local lg = love.graphics
@@ -15,9 +16,9 @@ end
 function Hud:drawAimMeter()
 	if Gun.aimTime <= 0 then return end
 
-	lg.setColor(1, 1, 1)
+	Colours:set(Colours.white)
 	if Gun.aimTime > Gun.aimLimit * 0.8 then
-		lg.setColor(1, 0, 0)
+		Colours:set(Colours.red)
 	end
 	x = lg.getWidth() - 30
 	y = lg.getHeight() - 30
@@ -36,8 +37,8 @@ function Hud:drawAmmo()
 	local bulletPadding = 3
 	x = lg.getWidth() - 90 
 	y = lg.getHeight() - 40
-	
-	lg.setColor(255, 192, 0)
+
+	Colours:set(Colours.gold)
 	for i=1,Gun.ammo, 1 do
 		lg.rectangle("fill", x, y, bulletWidth, bulletHeight)
 		y = y - bulletHeight - bulletPadding
@@ -45,7 +46,7 @@ function Hud:drawAmmo()
 end
 
 function Hud:draw()
-	lg.setColor(1, 1, 1)
+	Colours:set(Colours.white)
 	lg.setFont(self.font)
 	lg.print("Score:", 0, 0)
 	lg.print(Game.score, 150, 2)
