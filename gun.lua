@@ -50,7 +50,8 @@ end
 function Gun:randomiseShot(x, y)
 	local randomX
 	local randomY
-	
+
+	print(self:currentAimRadius())
 	randomX = x + math.floor(math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9))
 	randomY = y + math.floor(math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9))
 	return randomX, randomY
@@ -126,7 +127,10 @@ function Gun:update(dt)
 end
 	
 function Gun:currentAimRadius()
-	return self.aimRadius * (1 - (self.aimTime / self.aimLimit))
+	if self.aiming and self.aimTime < self.aimLimit then
+		return math.floor(self.aimRadius * (1 - (self.aimTime / self.aimLimit)))
+	end
+	return self.aimRadius
 end
 
 function Gun:drawBulletHole()

@@ -11,8 +11,14 @@ Keys.reloadKey = "space"
 Keys.shootButton = 1
 Keys.aimButton = 2
 
+--gameState needs to be accessible everywhere
+GameState = {}
+
+GameState.inGame = 0
+GameState.mainMenu = 1
+GameState.current = 0
+
 --[[ TODO ]]--
--- make hud transparent when crosshair is over it
 -- Menu screen when the game starts
 -- figure out how to embed the game online somewhere
 -- Add level system
@@ -31,8 +37,7 @@ Keys.aimButton = 2
 
 -- called when the game starts. Handles all the setup stuff
 function love.load()
-	gameState = 0
-	if gameState == 0 then
+	if GameState.current == GameState.inGame then
 		Game:load()
 		Gun:load()	
 		Hud:load()
@@ -41,7 +46,7 @@ end
 
 -- called 60 times per second. Handles the main game loop
 function love.update(dt)
-	if gameState == 0 then
+	if GameState.current == GameState.inGame then
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
@@ -50,7 +55,7 @@ end
 
 -- called 60 times per second. Handles graphical elements of the game
 function love.draw()
-	if gameState == 0 then
+	if GameState.current == GameState.inGame then
 		Game:draw()
 		Gun:draw()
 		Hud:draw()
@@ -60,7 +65,7 @@ end
 -- KEY HANDLERS --
 
 function love.mousepressed(x, y, button, istouch, presses)
-	if gameState == 0 then
+	if GameState.current == GameState.inGame then
 		Gun:shoot(x, y, button)
 	end
 end
