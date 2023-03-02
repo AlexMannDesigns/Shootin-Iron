@@ -3,6 +3,7 @@ local Colours = require("colours")
 
 local Gun = {}
 local lg = love.graphics
+local alpha = 1
 
 function Gun:load()
 	love.mouse.setVisible(false)
@@ -46,13 +47,21 @@ function Gun:aim(dt)
 	end
 end
 
-function Gun:shoot( x, y, button)
+function Gun:randomiseShot(x, y)
+	local randomX
+	local randomY
+	
+	randomX = x + math.floor(math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9))
+	randomY = y + math.floor(math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9))
+	return randomX, randomY
+end
+
+function Gun:shoot(x, y, button)
 	if self:playerCanShoot(button) then
-		self.bulletX = x + math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9)
-		self.bulletY = y + math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9)
+		self.bulletX, self.bulletY = self:randomiseShot(x, y)
 		self.bulletHoleVisible = true
 		self.bulletHoleTime = self.bulletHoleTimeLimit
-		print("bullet x: ", self.bulletX, "actual x: ", x, "bullet y:", self.bulletY, "actual y: ", y)
+	--  print("bullet x: ", self.bulletX, "actual x: ", x, self.bulletX < x) --"bullet y:", self.bulletY, "actual y: ", y)
 		Game:checkHit(self.bulletX, self.bulletY)
 	--[[	if y - self.recoil < 0 then
 			love.mouse.setPosition(x, 0)
@@ -121,7 +130,7 @@ function Gun:currentAimRadius()
 end
 
 function Gun:drawBulletHole()
-	Colours:set(Colours.red)
+	Colours:set(Colours.red, alpha)
 	lg.circle("fill", self.bulletX, self.bulletY, 5)
 end
 
@@ -130,7 +139,7 @@ function Gun:drawCrosshair()
 	local y
 
 	x, y = love.mouse.getPosition()
-	Colours:set(Colours.gold)
+	Colours:set(Colours.gold, alpha)
 	lg.circle("line", x, y, self:currentAimRadius())
 end
 

@@ -5,6 +5,7 @@ local Game = {}
 local targets = {}
 
 local lg = love.graphics
+local alpha = 1
 local bullseye = 0.1
 local inner = 0.4
 local outer = 0.8
@@ -139,13 +140,13 @@ end
 
 function Game:drawGameTargets()
 	for i=1,#targets,1 do
-		Colours:set(Colours.green)
+		Colours:set(Colours.green, alpha)
 		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius)
-		Colours:set(Colours.white)
+		Colours:set(Colours.white, alpha)
 		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * outer)
-		Colours:set(Colours.green)
+		Colours:set(Colours.green, alpha)
 		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * inner)
-		Colours:set(Colours.white)
+		Colours:set(Colours.white, alpha)
 		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * bullseye)
 	end
 end
