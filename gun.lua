@@ -1,6 +1,8 @@
 local Game = require("game")
-local Gun = {}
+local Colours = require("colours")
 
+local Gun = {}
+local lg = love.graphics
 
 function Gun:load()
 	love.mouse.setVisible(false)
@@ -9,7 +11,8 @@ function Gun:load()
 	self.reloadKeyDown = 0
 	self.reloadDuration = 0.5
 	self.aimTime = 0
-	self.aimLimit = 2 
+	self.aimLimit = 2
+	self.aimRadius = 100
 	self.inShotCoolDown = false
 	self.shotCoolDownDuration = 0.3
 	self.shotCoolDownTime = 0
@@ -31,13 +34,10 @@ end
 
 function Gun:aim(dt)
 	if self.aiming == true and self.aimTime <= self.aimLimit then
-		love.mouse.setVisible(true)
 		self.aimTime = self.aimTime + dt
 		if self.aimTime >= self.aimLimit then
 			self.aiming = false
 		end
-	else
-		love.mouse.setVisible(false)
 	end
 end
 
@@ -92,7 +92,18 @@ function Gun:update(dt)
 	self.aiming = love.mouse.isDown(Keys.aimButton)
 end
 
+function Gun:drawCrosshair()
+	Colours:set(Colours.gold)
+	lg.circle(
+		"line",
+		love.mouse.getX(),
+		love.mouse.getY(),
+		self.aimRadius * (1 - (self.aimTime / self.aimLimit))
+		)
+end
+
 function Gun:draw()
+	if self.aiming and self.aimTime <= self.aimLimit then self:drawCrosshair() end
 end
 
 return Gun

@@ -2,6 +2,8 @@ local Game = require("game")
 local Gun = require("gun")
 local Hud = require("hud")
 
+--[[ GLOBAL VARS ]]--
+
 --Keys object can be global for now...
 Keys = {}
 
@@ -10,9 +12,9 @@ Keys.shootButton = 1
 Keys.aimButton = 2
 
 --[[ TODO ]]--
--- look up how to set colours in a more readable fashion
 -- make hud transparent when crosshair is over it
 -- Menu screen when the game starts
+-- figure out how to embed the game online somewhere
 -- Add level system
 	-- Timer should count down, rather than up
 	-- Introduce more difficulty (more targets, less time)
