@@ -16,6 +16,11 @@ function Gun:load()
 	self.inShotCoolDown = false
 	self.shotCoolDownDuration = 0.3
 	self.shotCoolDownTime = 0
+	self.recoil = 50
+	self.bulletX = 0
+	self.bulletY = 0
+	self.bulletHoleVisible = false
+	self.bulletHoleTimeLimit = 2
 end
 
 --[[ 
@@ -43,7 +48,17 @@ end
 
 function Gun:shoot( x, y, button)
 	if self:playerCanShoot(button) then
-		Game:checkHit(x, y)
+		self.bulletX = x + math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9)
+		self.bulletY = y + math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9)
+		self.bulletHoleVisible = true
+		self.bulletHoleTime = self.bulletHoleTimeLimit
+		print("bullet x: ", self.bulletX, "actual x: ", x, "bullet y:", self.bulletY, "actual y: ", y)
+		Game:checkHit(self.bulletX, self.bulletY)
+	--[[	if y - self.recoil < 0 then
+			love.mouse.setPosition(x, 0)
+		else
+			love.mouse.setPosition(x, y - self.recoil)
+		end]]--
 		self.ammo = self.ammo - 1
 		self.inShotCoolDown = true
 		self.shotCoolDownTime = self.shotCoolDownDuration
@@ -83,27 +98,45 @@ function Gun:decreaseAimTime(dt)
 	end
 end
 
+function Gun:decreaseBulletHoleTime(dt)
+	if self.bulletHoleVisible and self.bulletHoleTime > 0 then
+		self.bulletHoleTime = self.bulletHoleTime - dt
+	elseif self.bulletHoleVisible then
+		self.bulletHoleVisible = false
+	end
+end
+
 function Gun:update(dt)
 	self:reload(dt)
 	self:decreaseShotCoolDown(dt)
+	self:decreaseBulletHoleTime(dt)
 	self:decreaseAimTime(dt)
 	self.reloading = love.keyboard.isDown(Keys.reloadKey)
 	self:aim(dt)
 	self.aiming = love.mouse.isDown(Keys.aimButton)
 end
+	
+function Gun:currentAimRadius()
+	return self.aimRadius * (1 - (self.aimTime / self.aimLimit))
+end
+
+function Gun:drawBulletHole()
+	Colours:set(Colours.red)
+	lg.circle("fill", self.bulletX, self.bulletY, 5)
+end
 
 function Gun:drawCrosshair()
+	local x
+	local y
+
+	x, y = love.mouse.getPosition()
 	Colours:set(Colours.gold)
-	lg.circle(
-		"line",
-		love.mouse.getX(),
-		love.mouse.getY(),
-		self.aimRadius * (1 - (self.aimTime / self.aimLimit))
-		)
+	lg.circle("line", x, y, self:currentAimRadius())
 end
 
 function Gun:draw()
 	if self.aiming and self.aimTime <= self.aimLimit then self:drawCrosshair() end
+	if self.bulletHoleVisible then self:drawBulletHole() end
 end
 
 return Gun
