@@ -15,6 +15,7 @@ end
 
 function State:startGame()
 	self:clear()
+	love.mouse.setVisible(false)
 	self.inGame = true
 end
 

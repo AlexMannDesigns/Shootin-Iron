@@ -22,6 +22,9 @@ function Button(func, textX, textY, buttonX, buttonY, textColour, buttonColour, 
 		text = text or "No text added",
 		-- create text component function
 		--textComponent = 
+		clicked = function()
+			func()
+		end,
 
 		draw = function(self)
 			lg.setColor(self.buttonColour["r"], self.buttonColour["g"], self.buttonColour["b"])

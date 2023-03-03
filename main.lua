@@ -33,13 +33,10 @@ Keys.aimButton = 2
 -- called when the game starts. Handles all the setup stuff
 function love.load()
 	State:load()	
-	if State.inGame then
-		Game:load()
-		Gun:load()	
-		Hud:load()
-	elseif State.mainMenu then
-		Menu:load()
-	end
+	Game:load()
+	Gun:load()	
+	Hud:load()
+	Menu:load()
 end
 
 -- called 60 times per second. Handles the main game loop
@@ -67,6 +64,8 @@ end
 function love.mousepressed(x, y, button, istouch, presses)
 	if State.inGame then
 		Gun:shoot(x, y, button)
+	elseif State.mainMenu then
+		Menu:checkClicked(x, y, button)
 	end
 end
 

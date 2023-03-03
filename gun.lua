@@ -6,7 +6,6 @@ local lg = love.graphics
 local alpha = 1
 
 function Gun:load()
-	love.mouse.setVisible(false)
 	self.ammoCap = 6
 	self.ammo = self.ammoCap
 	self.reloadKeyDown = 0

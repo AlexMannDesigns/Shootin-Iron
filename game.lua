@@ -21,7 +21,6 @@ local targetPoints = 10
 function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
 
-	love.mouse.setVisible(false)
 	self.targetCoolDownTime = 2
 	self.targetCoolDown = self.targetCoolDownTime
 	self.targetTimer = 3 
