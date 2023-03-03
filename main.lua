@@ -1,6 +1,8 @@
 local Game = require("game")
 local Gun = require("gun")
 local Hud = require("hud")
+local Menu = require("menu")
+local State = require("state")
 
 --[[ GLOBAL VARS ]]--
 
@@ -10,13 +12,6 @@ Keys = {}
 Keys.reloadKey = "space"
 Keys.shootButton = 1
 Keys.aimButton = 2
-
---gameState needs to be accessible everywhere
-GameState = {}
-
-GameState.inGame = 0
-GameState.mainMenu = 1
-GameState.current = 0
 
 --[[ TODO ]]--
 -- Menu screen when the game starts
@@ -31,22 +26,25 @@ GameState.current = 0
 	-- Add a nice font for the hud
 	-- Make the targets look like targets
 	-- Add a background
-	-- Add a crosshair
+	-- create custom menu cursor
 
 -- MAIN FUNCTIONS --
 
 -- called when the game starts. Handles all the setup stuff
 function love.load()
-	if GameState.current == GameState.inGame then
+	State:load()	
+	if State.inGame then
 		Game:load()
 		Gun:load()	
 		Hud:load()
+	elseif State.mainMenu then
+		Menu:load()
 	end
 end
 
 -- called 60 times per second. Handles the main game loop
 function love.update(dt)
-	if GameState.current == GameState.inGame then
+	if State.inGame then
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
@@ -55,17 +53,19 @@ end
 
 -- called 60 times per second. Handles graphical elements of the game
 function love.draw()
-	if GameState.current == GameState.inGame then
+	if State.inGame then
 		Game:draw()
 		Gun:draw()
 		Hud:draw()
+	elseif State.mainMenu then
+		Menu:draw()	
 	end
 end
 
 -- KEY HANDLERS --
 
 function love.mousepressed(x, y, button, istouch, presses)
-	if GameState.current == GameState.inGame then
+	if State.inGame then
 		Gun:shoot(x, y, button)
 	end
 end

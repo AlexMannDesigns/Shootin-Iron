@@ -143,8 +143,9 @@ function Gun:drawCrosshair()
 	local y
 
 	x, y = love.mouse.getPosition()
-	Colours:set(Colours.gold, alpha)
+	Colours:set(Colours.white, alpha)
 	if self.aiming and self.aimTime <= self.aimLimit then
+		Colours:set(Colours.gold, alpha)
 		lg.circle("line", x, y, self:currentAimRadius())
 	end
 	lg.line(x + self:currentAimRadius(),  y, x + self:currentAimRadius() + 10, y)

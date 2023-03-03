@@ -1,4 +1,4 @@
-local cron = require 'cron'
+local cron = require("cron")
 local Colours = require("colours")
 local Game = {}
 
