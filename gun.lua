@@ -144,11 +144,17 @@ function Gun:drawCrosshair()
 
 	x, y = love.mouse.getPosition()
 	Colours:set(Colours.gold, alpha)
-	lg.circle("line", x, y, self:currentAimRadius())
+	if self.aiming and self.aimTime <= self.aimLimit then
+		lg.circle("line", x, y, self:currentAimRadius())
+	end
+	lg.line(x + self:currentAimRadius(),  y, x + self:currentAimRadius() + 10, y)
+	lg.line(x - self:currentAimRadius(),  y, x - self:currentAimRadius() - 10, y)
+	lg.line(x, y + self:currentAimRadius(),  x,  y + self:currentAimRadius() + 10)
+	lg.line(x, y - self:currentAimRadius(),  x,  y - self:currentAimRadius() - 10)
 end
 
 function Gun:draw()
-	if self.aiming and self.aimTime <= self.aimLimit then self:drawCrosshair() end
+	self:drawCrosshair()
 	if self.bulletHoleVisible then self:drawBulletHole() end
 end
 
