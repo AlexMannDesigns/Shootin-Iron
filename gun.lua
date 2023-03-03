@@ -1,5 +1,5 @@
 local Game = require("game")
-local Colours = require("colours")
+local Colours = require("components/colours")
 
 local Gun = {}
 local lg = love.graphics
@@ -50,7 +50,6 @@ function Gun:randomiseShot(x, y)
 	local randomX
 	local randomY
 
-	print(self:currentAimRadius())
 	randomX = x + math.floor(math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9))
 	randomY = y + math.floor(math.random(0 - self:currentAimRadius() * 0.9, self:currentAimRadius() * 0.9))
 	return randomX, randomY
@@ -135,6 +134,7 @@ end
 function Gun:drawBulletHole()
 	Colours:set(Colours.red, alpha)
 	lg.circle("fill", self.bulletX, self.bulletY, 5)
+	Colours:set(Colours.white, alpha)
 end
 
 function Gun:drawCrosshair()
@@ -151,6 +151,7 @@ function Gun:drawCrosshair()
 	lg.line(x - self:currentAimRadius(),  y, x - self:currentAimRadius() - 10, y)
 	lg.line(x, y + self:currentAimRadius(),  x,  y + self:currentAimRadius() + 10)
 	lg.line(x, y - self:currentAimRadius(),  x,  y - self:currentAimRadius() - 10)
+	Colours:set(Colours.white, alpha)
 end
 
 function Gun:draw()

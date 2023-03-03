@@ -1,13 +1,12 @@
 local Game = require("game")
 local Gun = require("gun")
-local Colours = require("colours")
+local Colours = require("components/colours")
+local Text = require("components/text")
 
 local Hud = {}
 local lg = love.graphics
-local alpha = 1
 
 function Hud:load()
-	self.font = lg.newFont(40)
 end
 
 function Hud:update(dt)
@@ -22,7 +21,7 @@ function Hud:checkCursorHudOverlap(scrnWidth, scrnHeight)
 end
 
 --gun.aimTime should draw a rectangle on the screen to act as a stamina meter
-function Hud:drawAimMeter(scrnWidth, scrnHeight)
+function Hud:drawAimMeter(scrnWidth, scrnHeight, alpha)
 	Colours:set(Colours.white, alpha)
 	if Gun.aimTime > Gun.aimLimit * 0.8 then
 		Colours:set(Colours.red, alpha)
@@ -34,9 +33,10 @@ function Hud:drawAimMeter(scrnWidth, scrnHeight)
 	lg.rotate(3.14159)
 	lg.rectangle("fill", 0, 0, 20, Gun.aimTime * 100)
 	lg.pop()
+	Colours:set(Colours.white, 1)
 end
 
-function Hud:drawAmmo(scrnWidth, scrnHeight)
+function Hud:drawAmmo(scrnWidth, scrnHeight, alpha)
 	local bulletWidth = 30
 	local bulletHeight = 10
 	local bulletPadding = 3
@@ -49,26 +49,20 @@ function Hud:drawAmmo(scrnWidth, scrnHeight)
 		lg.rectangle("fill", x, y, bulletWidth, bulletHeight)
 		y = y - bulletHeight - bulletPadding
 	end
+	Colours:set(Colours.white, 1)
 end
 
 function Hud:draw()
-	local scrnWidth
-	local scrnHeight
+	local scrnWidth = lg.getWidth()
+	local scrnHeight = lg.getHeight()
+	local alpha = 1
+	if self:checkCursorHudOverlap(scrnWidth, scrnHeight) then alpha = 0.2 end
 
-	scrnWidth = lg.getWidth()
-	scrnHeight = lg.getHeight()
-	if self:checkCursorHudOverlap(scrnWidth, scrnHeight) then
-		alpha = 0.2
-	else
-		alpha = 1
-	end
-	Colours:set(Colours.white, alpha)
-	lg.setFont(self.font)
-	lg.print("Score:", 0, 0)
-	lg.print(Game.score, 150, 2)
-	lg.print(Game.seconds, scrnWidth - 150, 2)
-	if Gun.ammo > 0 then Hud:drawAmmo(scrnWidth, scrnHeight) end
-	if Gun.aimTime > 0 then Hud:drawAimMeter(scrnWidth, scrnHeight) end
+	Text(Game.seconds, scrnWidth - 150, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
+	Text("Score: " .. Game.score, 0, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
+	
+	if Gun.ammo > 0 then Hud:drawAmmo(scrnWidth, scrnHeight, alpha) end
+	if Gun.aimTime > 0 then Hud:drawAimMeter(scrnWidth, scrnHeight, alpha) end
 end
 
 return Hud

@@ -13,7 +13,7 @@ function Menu:load()
 	}
 	self.buttons = {
 		Button(self.funcs.start, 20, 30, lg.getWidth() / 3, lg.getHeight() / 3, nil, nil, nil, nil, "new game"),
-		Button(self.funcs.quit, 20, 30, lg.getWidth() / 3, (lg.getHeight() / 3) + 110, nil, nil, nil, nil, "quit game")
+		Button(self.funcs.quit, 20, 30, lg.getWidth() / 3, (lg.getHeight() / 3) + 110, nil, nil, nil, nil, "quit")
 	}
 end
 

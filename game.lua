@@ -1,5 +1,5 @@
 local cron = require("cron")
-local Colours = require("colours")
+local Colours = require("components/colours")
 local Game = {}
 
 local targets = {}
@@ -134,8 +134,6 @@ function Game:update(dt)
 end
 
 -- DRAW FUNCTIONS --
-
--- nothing special here yet, everything about how the game looks is basically a placeholder 
 
 function Game:drawGameTargets()
 	for i=1,#targets,1 do
