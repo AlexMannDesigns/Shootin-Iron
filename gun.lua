@@ -1,9 +1,11 @@
 local Game = require("game")
 local Colours = require("components/colours")
+local love = require("love")
 
 local Gun = {}
 local lg = love.graphics
 local alpha = 1
+local angle = 0
 
 function Gun:load()
 	self.ammoCap = 6
@@ -122,8 +124,9 @@ function Gun:update(dt)
 	self.reloading = love.keyboard.isDown(Keys.reloadKey)
 	self:aim(dt)
 	self.aiming = love.mouse.isDown(Keys.aimButton)
+	angle = angle + .5*math.pi * dt
 end
-	
+
 function Gun:currentAimRadius()
 	if self.aiming and self.aimTime < self.aimLimit then
 		return math.floor(self.aimRadius * (1 - (self.aimTime / self.aimLimit)))
@@ -143,14 +146,19 @@ function Gun:drawCrosshair()
 
 	x, y = love.mouse.getPosition()
 	Colours:set(Colours.white, alpha)
+	lg.push()
 	if self.aiming and self.aimTime <= self.aimLimit then
 		Colours:set(Colours.gold, alpha)
 		lg.circle("line", x, y, self:currentAimRadius())
+		lg.translate(x, y)
+		lg.rotate(angle)
+		lg.translate(-x, -y)
 	end
 	lg.line(x + self:currentAimRadius(),  y, x + self:currentAimRadius() + 10, y)
 	lg.line(x - self:currentAimRadius(),  y, x - self:currentAimRadius() - 10, y)
 	lg.line(x, y + self:currentAimRadius(),  x,  y + self:currentAimRadius() + 10)
 	lg.line(x, y - self:currentAimRadius(),  x,  y - self:currentAimRadius() - 10)
+	lg.pop()
 	Colours:set(Colours.white, alpha)
 end
 

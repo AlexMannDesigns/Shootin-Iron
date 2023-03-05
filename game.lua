@@ -23,15 +23,15 @@ function Game:load()
 
 	self.targetCoolDownTime = 2
 	self.targetCoolDown = self.targetCoolDownTime
-	self.targetTimer = 3 
+	self.targetTimer = 3
 	self.targetCurrentTime = 0
-	self.minTargets = 1 
-	self.maxTargets = 6 
+	self.minTargets = 1
+	self.maxTargets = 6
 	self.minRadius = 30
 	self.maxRadius = 70
 	self.score = 0
 	self.seconds = 0
-	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end) 
+	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end)
 	self.initialTime = love.timer.getTime()
 end
 
@@ -55,7 +55,7 @@ end
 --creates targets when there are none present. Ticks down the cool down timer
 --before next targets are created
 function Game:createTargets(dt)
-	local numberOfTargets = math.random(self.minTargets, self.maxTargets) 
+	local numberOfTargets = math.random(self.minTargets, self.maxTargets)
 	if #targets == 0 then
 		self.targetCurrentTime = 0
 		if self.targetCoolDown > 0 then
@@ -89,7 +89,7 @@ end
 
 -- calculates the distance from the mouse click and the centre of the target
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
-	return math.sqrt(math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2)) 
+	return math.sqrt(math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2))
 end
 
 function Game:targetHit(x, y, i)
@@ -113,7 +113,7 @@ function Game:checkHit(x, y)
 	for i=#targets, 1, -1 do
 		if self:targetHit(x, y, i) then
 			if self:bullseyeHit(x, y, i) then
-				self.score = self.score + bullseyePoints 
+				self.score = self.score + bullseyePoints
 			elseif self:innerHit(x, y, i) then
 				self.score = self.score + innerPoints
 			elseif self:outerHit(x, y, i) then

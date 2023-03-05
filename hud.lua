@@ -41,7 +41,7 @@ function Hud:drawAmmo(scrnWidth, scrnHeight, alpha)
 	local bulletHeight = 10
 	local bulletPadding = 3
 
-	x = scrnWidth - 90 
+	x = scrnWidth - 90
 	y = scrnHeight - 40
 
 	Colours:set(Colours.gold, alpha)
@@ -53,14 +53,12 @@ function Hud:drawAmmo(scrnWidth, scrnHeight, alpha)
 end
 
 function Hud:draw()
-	local scrnWidth = lg.getWidth()
-	local scrnHeight = lg.getHeight()
+	local scrnWidth, scrnHeight = lg.getDimensions()
 	local alpha = 1
 	if self:checkCursorHudOverlap(scrnWidth, scrnHeight) then alpha = 0.2 end
 
 	Text(Game.seconds, scrnWidth - 150, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
 	Text("Score: " .. Game.score, 0, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
-	
 	if Gun.ammo > 0 then Hud:drawAmmo(scrnWidth, scrnHeight, alpha) end
 	if Gun.aimTime > 0 then Hud:drawAimMeter(scrnWidth, scrnHeight, alpha) end
 end
