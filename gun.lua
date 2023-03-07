@@ -15,6 +15,7 @@ function Gun:load()
 	self.aimTime = 0
 	self.aimLimit = 2
 	self.aimRadius = 100
+	self.minRadius = 10
 	self.inShotCoolDown = false
 	self.shotCoolDownDuration = 0.3
 	self.shotCoolDownTime = 0
@@ -127,8 +128,11 @@ function Gun:update(dt)
 end
 
 function Gun:currentAimRadius()
+	local radius
 	if self.aiming and self.aimTime < self.aimLimit then
-		return math.floor(self.aimRadius * (1 - (self.aimTime / self.aimLimit)))
+		radius = math.floor(self.aimRadius * (1 - (self.aimTime / self.aimLimit)))
+		if radius >= self.minRadius then return radius end
+		return self.minRadius
 	end
 	return self.aimRadius
 end
