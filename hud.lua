@@ -14,20 +14,15 @@ function Hud:update(dt)
 end
 
 function Hud:checkCursorHudOverlap(scrnWidth, scrnHeight)
-	local x
-	local y
-	
-	x, y = love.mouse.getPosition()
+	local x, y = love.mouse.getPosition()
 	return (x > scrnWidth * 0.8 and y > scrnHeight * 0.8) or y < scrnHeight * 0.2
 end
 
---gun.aimTime should draw a rectangle on the screen to act as a stamina meter
+--gun.aimTime draws a rectangle on the screen to act as a stamina meter
 function Hud:drawAimMeter(scrnWidth, scrnHeight, alpha)
-	local boarderColour = Colours.indigo
 	Colours:set(Colours.white, alpha)
 	if Gun.aimTime > Gun.aimLimit * 0.8 then
 		Colours:set(Colours.lightRed, alpha)
-		boarderColour = Colours.lightRed
 	end
 	local x = scrnWidth - 30
 	local y = scrnHeight - 30
@@ -35,8 +30,6 @@ function Hud:drawAimMeter(scrnWidth, scrnHeight, alpha)
 	lg.translate(x, y)
 	lg.rotate(3.14159)
 	lg.rectangle("fill", 0, 0, 20, Gun.aimTime * 100)
-	Colours:set(boarderColour, alpha)
-	lg.rectangle("line", 0, 0, 20, Gun.aimTime * 100)
 	lg.pop()
 	Colours:set(Colours.white, 1)
 end

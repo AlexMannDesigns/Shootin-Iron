@@ -23,12 +23,12 @@ local targetPoints = 10
 function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
 
-	self.targetCoolDownTime = 2
-	self.targetTimer = 3
+	self.targetCoolDownTime = 3
+	self.targetTimer = 4
 	self.minTargets = 1
-	self.maxTargets = 6
-	self.minRadius = 30
-	self.maxRadius = 70
+	self.maxTargets = 3
+	self.minRadius = 60
+	self.maxRadius = 80
 	self:initialiseGame()
 end
 
@@ -144,11 +144,40 @@ function Game:checkGameEnd()
 	end
 end
 
+-- at the start of the game there are fewer, bigger targets
+-- as the seconds tick down they are smaller and more numerous
+-- The time they are on screen and the pause between also reduce
+function Game:increaseDifficulty()
+	if self.seconds < 15 then
+		self.targetCoolDownTime = 1
+		self.targetTimer = 2
+		self.minTargets = 6
+		self.maxTargets = 10
+		self.minRadius = 30
+		self.maxRadius = 50
+	elseif self.seconds < 30 then
+		self.targetCoolDownTime = 2
+		self.targetTimer = 3
+		self.minTargets = 5
+		self.maxTargets = 8
+		self.minRadius = 40
+		self.maxRadius = 60
+	elseif self.seconds < 45 then
+		self.targetCoolDownTime = 2
+		self.targetTimer = 3
+		self.minTargets = 3
+		self.maxTargets = 7
+		self.minRadius = 50
+		self.maxRadius = 70
+	end
+end
+
 function Game:update(dt)
 	self.timer:update(dt)
 	self:checkGameEnd()
 	self:createTargets(dt)
 	self:incrementTargetTimer(dt)
+	self:increaseDifficulty(dt)
 end
 
 -- DRAW FUNCTIONS --

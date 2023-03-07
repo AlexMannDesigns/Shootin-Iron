@@ -5,7 +5,6 @@ local Hud = require("hud")
 local Menu = require("menu")
 local Score = require("score")
 local State = require("state")
-local Colours = require("components/colours")
 
 --[[ GLOBAL VARS ]]--
 
@@ -21,15 +20,15 @@ Keys.aimButton = 2
 -- figure out how to embed the game online somewhere - download link to exec might be easier
 -- Show less targets at the start, more at the end
 	-- pause between rounds of targets should progressively get shorter
+-- Display points as targets are hit, reveal score at the end
+-- Display timer as an hourglass
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add an easter egg
 	-- Monkey that runs around the screen and takes you to a 'you lose' screen if you shoot it
 -- Add sounds (gunshot, reload, ricochets, hammer click)
 -- Make it pretty
-	-- Add a nice font for the hud
-	-- Make the targets look like targets - Done, add some more colours
 	-- Add a background
-	-- create custom menu cursor
+	-- create custom menu cursor (spinning crosshair?)
 
 -- MAIN FUNCTIONS --
 
