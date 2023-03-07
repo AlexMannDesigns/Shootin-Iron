@@ -1,6 +1,7 @@
+local love = require("love")
 local Game = require("game")
 local Colours = require("components/colours")
-local love = require("love")
+local State = require("state")
 
 local Gun = {}
 local lg = love.graphics
@@ -9,21 +10,24 @@ local angle = 0
 
 function Gun:load()
 	self.ammoCap = 6
-	self.ammo = self.ammoCap
-	self.reloadKeyDown = 0
 	self.reloadDuration = 0.5
-	self.aimTime = 0
 	self.aimLimit = 2
 	self.aimRadius = 100
 	self.minRadius = 10
-	self.inShotCoolDown = false
 	self.shotCoolDownDuration = 0.3
+	self.bulletHoleTimeLimit = 2
+	self:initialiseGun()
+end
+
+function Gun:initialiseGun()
+	self.ammo = self.ammoCap
+	self.reloadKeyDown = 0
+	self.aimTime = 0
+	self.inShotCoolDown = false
 	self.shotCoolDownTime = 0
-	self.recoil = 50
 	self.bulletX = 0
 	self.bulletY = 0
 	self.bulletHoleVisible = false
-	self.bulletHoleTimeLimit = 2
 end
 
 --[[ 

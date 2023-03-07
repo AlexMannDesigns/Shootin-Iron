@@ -23,19 +23,22 @@ function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
 
 	self.targetCoolDownTime = 2
-	self.targetCoolDown = self.targetCoolDownTime
 	self.targetTimer = 3
-	self.targetCurrentTime = 0
 	self.minTargets = 1
 	self.maxTargets = 6
 	self.minRadius = 30
 	self.maxRadius = 70
+	self:initialiseGame()
+end
+
+function Game:initialiseGame()
 	self.score = 0
 	self.seconds = 60
 	self.timer = cron.every(1, function() self.seconds = self.seconds - 1 end)
-	self.initialTime = love.timer.getTime()
+	self.targetCurrentTime = 0
+	self.targetCoolDown = self.targetCoolDownTime
+	self.finished = false
 end
-
 -- TARGET HANDLERS --
 
 -- positions target at a random point within the window
@@ -70,12 +73,16 @@ function Game:createTargets(dt)
 	end
 end
 
+function Game:removeAllTargets()
+	for i=1,#targets,1 do
+		table.remove(targets)
+	end
+	self.targetCurrentTime = 0
+end
+
 function Game:removeTargets()
 	if self.targetCurrentTime >= self.targetTimer then
-		for i=1,#targets,1 do
-			table.remove(targets)
-		end
-		self.targetCurrentTime = 0
+		self:removeAllTargets()
 	end
 end
 
@@ -123,14 +130,14 @@ function Game:checkHit(x, y)
 				self.score = self.score + targetPoints
 			end
 			table.remove(targets, i)
-			return 
+			return
 		end
 	end
 end
 
 function Game:checkGameEnd()
 	if self.seconds <= 0 then
-		State:endGame()
+		self.finished = true
 	end
 end
 

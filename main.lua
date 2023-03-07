@@ -46,6 +46,7 @@ end
 -- called 60 times per second. Handles the main game loop
 function love.update(dt)
 	if State.inGame then
+		if Game.finished then resetGame() end
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
@@ -67,6 +68,16 @@ function love.draw()
 	end
 end
 
+-- resets all stats to zero when the game reaches its end state
+function resetGame()
+	Game.finalScore = Game.score
+	Game:initialiseGame()
+	Game:removeAllTargets()
+	Gun:initialiseGun()
+	Game.finished = false
+	State:endGame()
+end
+
 -- KEY HANDLERS --
 
 function love.mousepressed(x, y, button)
@@ -74,7 +85,7 @@ function love.mousepressed(x, y, button)
 		Gun:shoot(x, y, button)
 	elseif State.mainMenu then
 		Menu:checkClicked(x, y, button)
-	elseif State.Score then
+	elseif State.score then
 		Score:checkClicked(x, y, button)
 	end
 end
@@ -83,6 +94,6 @@ function love.keypressed(key)
 	if key == "escape" then -- placeholder to close the game while testing
 		love.event.quit()
 	elseif key == "q" then
-		State:endGame()
+		resetGame()
 	end
 end
