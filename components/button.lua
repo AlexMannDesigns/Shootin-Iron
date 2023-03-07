@@ -19,10 +19,10 @@ function Button(func, textX, textY, buttonX, buttonY, textColour, buttonColour, 
 		buttonColour = buttonColour or {r = 1, g = 1, b = 1},
 		width = width or 200,
 		height = height or 100,
-		
+
 		buttonX = buttonX or 0, 
 		buttonY = buttonY or 0, 
-		
+
 		text = text or "No text added",
 		clicked = function()
 			func()

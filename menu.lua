@@ -1,8 +1,8 @@
-local Button = require("components.button")
+local love = require("love")
+local Button = require("components/button")
 local State = require("state")
 
 local Menu = {}
-
 local lg = love.graphics
 
 

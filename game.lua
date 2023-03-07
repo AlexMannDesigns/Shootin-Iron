@@ -1,5 +1,6 @@
 local love = require("love")
 local cron = require("cron")
+local State = require("state")
 local Colours = require("components/colours")
 
 local Game = {}
@@ -127,8 +128,15 @@ function Game:checkHit(x, y)
 	end
 end
 
+function Game:checkGameEnd()
+	if self.seconds <= 0 then
+		State:endGame()
+	end
+end
+
 function Game:update(dt)
 	self.timer:update(dt)
+	self:checkGameEnd()
 	self:createTargets(dt)
 	self:incrementTargetTimer(dt)
 end

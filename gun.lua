@@ -162,7 +162,7 @@ function Gun:drawCrosshair()
 end
 
 function Gun:draw()
-	self:drawCrosshair()
+	if self.reloading == false then self:drawCrosshair() end
 	if self.bulletHoleVisible then self:drawBulletHole() end
 end
 

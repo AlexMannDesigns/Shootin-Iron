@@ -1,6 +1,7 @@
 -- colour setting is dealt with in this class to make code in the rest of the program more readable
-local Colours = {}
+local love = require("love")
 
+local Colours = {}
 local lg = love.graphics
 local lm = love.math
 

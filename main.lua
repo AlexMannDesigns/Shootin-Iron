@@ -3,6 +3,7 @@ local Game = require("game")
 local Gun = require("gun")
 local Hud = require("hud")
 local Menu = require("menu")
+local Score = require("score")
 local State = require("state")
 
 --[[ GLOBAL VARS ]]--
@@ -39,6 +40,7 @@ function love.load()
 	Gun:load()
 	Hud:load()
 	Menu:load()
+	Score:load()
 end
 
 -- called 60 times per second. Handles the main game loop
@@ -47,6 +49,8 @@ function love.update(dt)
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
+	elseif State.score then
+		Score:update(dt)
 	end
 end
 
@@ -58,6 +62,8 @@ function love.draw()
 		Hud:draw()
 	elseif State.mainMenu then
 		Menu:draw()
+	elseif State.score then
+		Score:draw()
 	end
 end
 
@@ -68,12 +74,15 @@ function love.mousepressed(x, y, button)
 		Gun:shoot(x, y, button)
 	elseif State.mainMenu then
 		Menu:checkClicked(x, y, button)
+	elseif State.Score then
+		Score:checkClicked(x, y, button)
 	end
 end
 
 function love.keypressed(key)
 	if key == "escape" then -- placeholder to close the game while testing
 		love.event.quit()
+	elseif key == "q" then
+		State:endGame()
 	end
 end
-

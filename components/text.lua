@@ -1,6 +1,6 @@
 local love = require("love")
 local Colours = require("components/colours")
-lg = love.graphics
+local lg = love.graphics
 
 -- component function for handling how text will be displayed throughout the game
 
@@ -10,8 +10,8 @@ function Text(text, x, y, fontSize, fadeIn, fadeOut, wrapWidth, align, opacity, 
 	fadeOut = fadeOut or false
 	wrapWidth = wrapWidth or lg.getWidth()
 	align = align or "left"
-	opacity = opacity or 1 
-	colour = colour or Colours.white 
+	opacity = opacity or 1
+	colour = colour or Colours.white
 
 	local TEXT_FADE_DUR = 5 --const handles the fade duration
 	local fonts = {
