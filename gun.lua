@@ -1,7 +1,6 @@
 local love = require("love")
 local Game = require("game")
 local Colours = require("components/colours")
-local State = require("state")
 
 local Gun = {}
 local lg = love.graphics
@@ -45,7 +44,7 @@ function Gun:playerCanShoot(button)
 end
 
 function Gun:aim(dt)
-	if self.aiming == true and self.aimTime <= self.aimLimit then
+	if self.aiming == true and self.reloading == false and self.aimTime <= self.aimLimit then
 		self.aimTime = self.aimTime + dt
 		if self.aimTime >= self.aimLimit then
 			self.aiming = false
@@ -68,11 +67,6 @@ function Gun:shoot(x, y, button)
 		self.bulletHoleVisible = true
 		self.bulletHoleTime = self.bulletHoleTimeLimit
 		Game:checkHit(self.bulletX, self.bulletY)
-	--[[	if y - self.recoil < 0 then
-			love.mouse.setPosition(x, 0)
-		else
-			love.mouse.setPosition(x, y - self.recoil)
-		end]]--
 		self.ammo = self.ammo - 1
 		self.inShotCoolDown = true
 		self.shotCoolDownTime = self.shotCoolDownDuration
@@ -107,7 +101,7 @@ function Gun:decreaseShotCoolDown(dt)
 end
 
 function Gun:decreaseAimTime(dt)
-	if self.aiming == false and self.aimTime > 0 then
+	if (self.aiming == false or self.reloading == true) and self.aimTime > 0 then
 		self.aimTime = self.aimTime - (1.5 * dt)
 	end
 end
@@ -121,13 +115,13 @@ function Gun:decreaseBulletHoleTime(dt)
 end
 
 function Gun:update(dt)
+	self.aiming = love.mouse.isDown(Keys.aimButton)
+	self.reloading = love.keyboard.isDown(Keys.reloadKey)
 	self:reload(dt)
 	self:decreaseShotCoolDown(dt)
 	self:decreaseBulletHoleTime(dt)
 	self:decreaseAimTime(dt)
-	self.reloading = love.keyboard.isDown(Keys.reloadKey)
 	self:aim(dt)
-	self.aiming = love.mouse.isDown(Keys.aimButton)
 	angle = angle + .5*math.pi * dt
 end
 
@@ -148,14 +142,11 @@ function Gun:drawBulletHole()
 end
 
 function Gun:drawCrosshair()
-	local x
-	local y
-
-	x, y = love.mouse.getPosition()
-	Colours:set(Colours.white, alpha)
+	local x, y = love.mouse.getPosition()
+	Colours:set(Colours.indigo, alpha)
 	lg.push()
 	if self.aiming and self.aimTime <= self.aimLimit then
-		Colours:set(Colours.gold, alpha)
+		Colours:set(Colours.lightRed, alpha)
 		lg.circle("line", x, y, self:currentAimRadius())
 		lg.translate(x, y)
 		lg.rotate(angle)

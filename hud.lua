@@ -23,16 +23,20 @@ end
 
 --gun.aimTime should draw a rectangle on the screen to act as a stamina meter
 function Hud:drawAimMeter(scrnWidth, scrnHeight, alpha)
+	local boarderColour = Colours.indigo
 	Colours:set(Colours.white, alpha)
 	if Gun.aimTime > Gun.aimLimit * 0.8 then
-		Colours:set(Colours.red, alpha)
+		Colours:set(Colours.lightRed, alpha)
+		boarderColour = Colours.lightRed
 	end
-	x = scrnWidth - 30
-	y = scrnHeight - 30
+	local x = scrnWidth - 30
+	local y = scrnHeight - 30
 	lg.push()
 	lg.translate(x, y)
 	lg.rotate(3.14159)
 	lg.rectangle("fill", 0, 0, 20, Gun.aimTime * 100)
+	Colours:set(boarderColour, alpha)
+	lg.rectangle("line", 0, 0, 20, Gun.aimTime * 100)
 	lg.pop()
 	Colours:set(Colours.white, 1)
 end
@@ -41,9 +45,8 @@ function Hud:drawAmmo(scrnWidth, scrnHeight, alpha)
 	local bulletWidth = 30
 	local bulletHeight = 10
 	local bulletPadding = 3
-
-	x = scrnWidth - 90
-	y = scrnHeight - 40
+	local x = scrnWidth - 90
+	local y = scrnHeight - 40
 
 	Colours:set(Colours.gold, alpha)
 	for i=1,Gun.ammo, 1 do

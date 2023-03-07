@@ -5,6 +5,7 @@ local Hud = require("hud")
 local Menu = require("menu")
 local Score = require("score")
 local State = require("state")
+local Colours = require("components/colours")
 
 --[[ GLOBAL VARS ]]--
 
@@ -17,8 +18,7 @@ Keys.aimButton = 2
 
 --[[ TODO ]]--
 -- Menu screen when the game starts - Done but needs improving
--- figure out how to embed the game online somewhere
--- Timer should count down from 60, then display score at the end and offer to play again or quit
+-- figure out how to embed the game online somewhere - download link to exec might be easier
 -- Show less targets at the start, more at the end
 	-- pause between rounds of targets should progressively get shorter
 -- Power ups (faster reload, higher capacity, rapid fire)
@@ -46,7 +46,7 @@ end
 -- called 60 times per second. Handles the main game loop
 function love.update(dt)
 	if State.inGame then
-		if Game.finished then resetGame() end
+		if Game.finished then ResetGame() end
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
@@ -57,6 +57,7 @@ end
 
 -- called 60 times per second. Handles graphical elements of the game
 function love.draw()
+	love.graphics.setBackgroundColor(love.math.colorFromBytes(255,186,8)) --placeholder
 	if State.inGame then
 		Game:draw()
 		Gun:draw()
@@ -69,7 +70,7 @@ function love.draw()
 end
 
 -- resets all stats to zero when the game reaches its end state
-function resetGame()
+function ResetGame()
 	Game.finalScore = Game.score
 	Game:initialiseGame()
 	Game:removeAllTargets()

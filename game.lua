@@ -6,6 +6,7 @@ local Colours = require("components/colours")
 local Game = {}
 local targets = {}
 local lg = love.graphics
+local scrnWidth, scrnHeight = lg.getDimensions()
 local alpha = 1
 local bullseye = 0.1
 local inner = 0.4
@@ -39,19 +40,21 @@ function Game:initialiseGame()
 	self.targetCoolDown = self.targetCoolDownTime
 	self.finished = false
 end
+
 -- TARGET HANDLERS --
 
 -- positions target at a random point within the window
 function Game:positionTarget(target)
-	target.x = math.random(target.radius, lg.getWidth() - target.radius)
-	target.y = math.random(target.radius, lg.getHeight() - target.radius)
+	target.x = math.random(target.radius, scrnWidth - target.radius)
+	target.y = math.random(target.radius, scrnHeight - target.radius)
 end
 
 function Game:addTarget()
 	targets[#targets+1] = {
 		radius = math.random(self.minRadius, self.maxRadius),
-		x = 0,
-		y = 0
+		x = nil,
+		y = nil,
+		colour = Colours:getTargetColour()
 	}
 	self:positionTarget(targets[#targets])
 end
@@ -151,15 +154,15 @@ end
 -- DRAW FUNCTIONS --
 
 function Game:drawGameTargets()
-	for i=1,#targets,1 do
-		Colours:set(Colours.green, alpha)
-		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius)
+	for _,target in pairs(targets) do
+		Colours:set(target.colour, alpha)
+		lg.circle("fill", target.x, target.y, target.radius)
 		Colours:set(Colours.white, alpha)
-		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * outer)
-		Colours:set(Colours.green, alpha)
-		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * inner)
+		lg.circle("fill", target.x, target.y, target.radius * outer)
+		Colours:set(target.colour, alpha)
+		lg.circle("fill", target.x, target.y, target.radius * inner)
 		Colours:set(Colours.white, alpha)
-		lg.circle("fill", targets[i].x, targets[i].y, targets[i].radius * bullseye)
+		lg.circle("fill", target.x, target.y, target.radius * bullseye)
 	end
 end
 
