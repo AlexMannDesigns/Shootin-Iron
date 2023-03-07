@@ -1,9 +1,9 @@
+local love = require("love")
 local cron = require("cron")
 local Colours = require("components/colours")
+
 local Game = {}
-
 local targets = {}
-
 local lg = love.graphics
 local alpha = 1
 local bullseye = 0.1
@@ -30,8 +30,8 @@ function Game:load()
 	self.minRadius = 30
 	self.maxRadius = 70
 	self.score = 0
-	self.seconds = 0
-	self.timer = cron.every(1, function() self.seconds = self.seconds + 1 end)
+	self.seconds = 60
+	self.timer = cron.every(1, function() self.seconds = self.seconds - 1 end)
 	self.initialTime = love.timer.getTime()
 end
 
@@ -89,7 +89,7 @@ end
 
 -- calculates the distance from the mouse click and the centre of the target
 function Game:distanceBetween(mouseX, mouseY, targetX, targetY)
-	return math.sqrt(math.pow((mouseX - targetX), 2) + math.pow((mouseY - targetY), 2))
+	return math.sqrt(((mouseX - targetX) ^ 2) + ((mouseY - targetY) ^ 2))
 end
 
 function Game:targetHit(x, y, i)

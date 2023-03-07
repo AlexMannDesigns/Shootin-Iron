@@ -1,3 +1,4 @@
+local love = require("love")
 local Game = require("game")
 local Gun = require("gun")
 local Hud = require("hud")
@@ -14,17 +15,18 @@ Keys.shootButton = 1
 Keys.aimButton = 2
 
 --[[ TODO ]]--
--- Menu screen when the game starts
+-- Menu screen when the game starts - Done but needs improving
 -- figure out how to embed the game online somewhere
--- Add level system
-	-- Timer should count down, rather than up
-	-- Introduce more difficulty (more targets, less time)
-	-- Overall score should be tracked between levels
+-- Timer should count down from 60, then display score at the end and offer to play again or quit
+-- Show less targets at the start, more at the end
+	-- pause between rounds of targets should progressively get shorter
 -- Power ups (faster reload, higher capacity, rapid fire)
+-- Add an easter egg
+	-- Monkey that runs around the screen and takes you to a 'you lose' screen if you shoot it
 -- Add sounds (gunshot, reload, ricochets, hammer click)
 -- Make it pretty
 	-- Add a nice font for the hud
-	-- Make the targets look like targets
+	-- Make the targets look like targets - Done, add some more colours
 	-- Add a background
 	-- create custom menu cursor
 
@@ -32,9 +34,9 @@ Keys.aimButton = 2
 
 -- called when the game starts. Handles all the setup stuff
 function love.load()
-	State:load()	
+	State:load()
 	Game:load()
-	Gun:load()	
+	Gun:load()
 	Hud:load()
 	Menu:load()
 end
@@ -55,13 +57,13 @@ function love.draw()
 		Gun:draw()
 		Hud:draw()
 	elseif State.mainMenu then
-		Menu:draw()	
+		Menu:draw()
 	end
 end
 
 -- KEY HANDLERS --
 
-function love.mousepressed(x, y, button, istouch, presses)
+function love.mousepressed(x, y, button)
 	if State.inGame then
 		Gun:shoot(x, y, button)
 	elseif State.mainMenu then

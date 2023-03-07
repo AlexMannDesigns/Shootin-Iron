@@ -1,3 +1,4 @@
+local love = require("love")
 local Colours = require("components/colours")
 lg = love.graphics
 
@@ -13,7 +14,6 @@ function Text(text, x, y, fontSize, fadeIn, fadeOut, wrapWidth, align, opacity, 
 	colour = colour or Colours.white 
 
 	local TEXT_FADE_DUR = 5 --const handles the fade duration
-	
 	local fonts = {
 		h1 = lg.newFont(60),
 		h2 = lg.newFont(50),
@@ -34,7 +34,6 @@ function Text(text, x, y, fontSize, fadeIn, fadeOut, wrapWidth, align, opacity, 
 		y = y,
 		opacity = opacity,
 		draw = function(self, tbl_text, index)
-			print(self.text, opacity)
 			if self.opacity > 0 then
 				lg.setFont(fonts[fontSize])
 				Colours:set(colour, self.opacity)

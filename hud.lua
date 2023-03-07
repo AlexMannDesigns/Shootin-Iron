@@ -1,3 +1,4 @@
+local love = require("love")
 local Game = require("game")
 local Gun = require("gun")
 local Colours = require("components/colours")

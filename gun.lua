@@ -62,7 +62,6 @@ function Gun:shoot(x, y, button)
 		self.bulletX, self.bulletY = self:randomiseShot(x, y)
 		self.bulletHoleVisible = true
 		self.bulletHoleTime = self.bulletHoleTimeLimit
-	--  print("bullet x: ", self.bulletX, "actual x: ", x, self.bulletX < x) --"bullet y:", self.bulletY, "actual y: ", y)
 		Game:checkHit(self.bulletX, self.bulletY)
 	--[[	if y - self.recoil < 0 then
 			love.mouse.setPosition(x, 0)
