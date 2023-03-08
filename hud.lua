@@ -55,7 +55,6 @@ function Hud:draw()
 	if self:checkCursorHudOverlap(scrnWidth, scrnHeight) then alpha = 0.2 end
 
 	Text(Game.seconds, scrnWidth - 150, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
-	Text("Score: " .. Game.score, 0, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
 	if Gun.ammo > 0 then Hud:drawAmmo(scrnWidth, scrnHeight, alpha) end
 	if Gun.aimTime > 0 then Hud:drawAimMeter(scrnWidth, scrnHeight, alpha) end
 end

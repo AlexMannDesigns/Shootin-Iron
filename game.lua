@@ -18,7 +18,7 @@ local targetPoints = 10
 
 --[[
 -- The Game class tracks the positioning and drawing of the targets and the
--- player actions, timer and score.
+-- timer and score.
 ]]--
 function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
@@ -29,6 +29,7 @@ function Game:load()
 	self.maxTargets = 3
 	self.minRadius = 60
 	self.maxRadius = 80
+	self.pointsTimerLimit = 2
 	self:initialiseGame()
 end
 
@@ -39,6 +40,8 @@ function Game:initialiseGame()
 	self.targetCurrentTime = 0
 	self.targetCoolDown = self.targetCoolDownTime
 	self.finished = false
+	self.currentPoints = nil
+	self.pointsYAnimate = 0
 end
 
 -- TARGET HANDLERS --
@@ -116,20 +119,26 @@ end
 function Game:outerHit(x, y, i)
 	return self:distanceBetween(x, y, targets[i].x, targets[i].y) <= targets[i].radius * outer
 end
-
 -- the score scales depending on which "ring" of the target was hit
 function Game:checkHit(x, y)
 	for i=#targets, 1, -1 do
 		if self:targetHit(x, y, i) then
 			if self:bullseyeHit(x, y, i) then
 				self.score = self.score + bullseyePoints
+				self.currentPoints = bullseyePoints
 			elseif self:innerHit(x, y, i) then
 				self.score = self.score + innerPoints
+				self.currentPoints = innerPoints
 			elseif self:outerHit(x, y, i) then
 				self.score = self.score + outerPoints
+				self.currentPoints = outerPoints
 			else
 				self.score = self.score + targetPoints
+				self.currentPoints = targetPoints
 			end
+			self.pointsX, self.pointsY = targets[i].x, targets[i].y
+			self.pointsTimer = self.pointsTimerLimit
+			self.pointsYAnimate = 0
 			table.remove(targets, i)
 			return
 		end
@@ -170,12 +179,22 @@ function Game:increaseDifficulty()
 	end
 end
 
+function Game:decrementPointsTimer(dt)
+	if self.currentPoints and self.pointsTimer > 0 then
+		self.pointsTimer = self.pointsTimer - dt
+		if self.pointsYAnimate < 50 then
+			self.pointsYAnimate = self.pointsYAnimate + 1
+		end
+	end
+end
+
 function Game:update(dt)
 	self.timer:update(dt)
 	self:checkGameEnd()
 	self:createTargets(dt)
 	self:incrementTargetTimer(dt)
 	self:increaseDifficulty(dt)
+	self:decrementPointsTimer(dt)
 end
 
 -- DRAW FUNCTIONS --
@@ -195,6 +214,9 @@ end
 
 function Game:draw()
 	self:drawGameTargets()
+	if self.currentPoints and self.pointsTimer > 0 then
+		Text(self.currentPoints, self.pointsX, self.pointsY - self.pointsYAnimate):draw()
+	end
 end
 
 return Game

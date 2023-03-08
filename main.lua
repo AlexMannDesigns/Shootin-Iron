@@ -18,9 +18,7 @@ Keys.aimButton = 2
 --[[ TODO ]]--
 -- Menu screen when the game starts - Done but needs improving
 -- figure out how to embed the game online somewhere - download link to exec might be easier
--- Display points as targets are hit, reveal total score at the end
 -- targets should appear one by one, add an appear effect
--- Bulletholes should only appear on the targets
 -- Display timer as an hourglass
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add an easter egg
