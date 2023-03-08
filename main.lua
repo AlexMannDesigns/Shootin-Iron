@@ -18,9 +18,9 @@ Keys.aimButton = 2
 --[[ TODO ]]--
 -- Menu screen when the game starts - Done but needs improving
 -- figure out how to embed the game online somewhere - download link to exec might be easier
--- Show less targets at the start, more at the end
-	-- pause between rounds of targets should progressively get shorter
--- Display points as targets are hit, reveal score at the end
+-- Display points as targets are hit, reveal total score at the end
+-- targets should appear one by one, add an appear effect
+-- Bulletholes should only appear on the targets
 -- Display timer as an hourglass
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add an easter egg
@@ -29,7 +29,6 @@ Keys.aimButton = 2
 -- Make it pretty
 	-- Add a background
 	-- create custom menu cursor (spinning crosshair?)
-
 -- MAIN FUNCTIONS --
 
 -- called when the game starts. Handles all the setup stuff
@@ -45,7 +44,7 @@ end
 -- called 60 times per second. Handles the main game loop
 function love.update(dt)
 	if State.inGame then
-		if Game.finished then ResetGame() end
+		if Game.finished then GameOver() end
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
@@ -69,7 +68,7 @@ function love.draw()
 end
 
 -- resets all stats to zero when the game reaches its end state
-function ResetGame()
+function GameOver()
 	Game.finalScore = Game.score
 	Game:initialiseGame()
 	Game:removeAllTargets()
@@ -93,7 +92,7 @@ end
 function love.keypressed(key)
 	if key == "escape" then -- placeholder to close the game while testing
 		love.event.quit()
-	elseif key == "q" then
-		resetGame()
+	elseif key == "q" then -- placeholder to test score screen
+		GameOver()
 	end
 end
