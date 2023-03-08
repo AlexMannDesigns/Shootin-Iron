@@ -1,4 +1,5 @@
 local love = require("love")
+local anim8 = require("libraries/anim8")
 local Game = require("game")
 local Colours = require("components/colours")
 
@@ -6,14 +7,20 @@ local Gun = {}
 local lg = love.graphics
 local alpha = 1
 local angle = 0
+local gunSprites, gunAnimation
+local scrnWidth, scrnHeight = lg.getDimensions()
 
 function Gun:load()
+	gunSprites = lg.newImage("assets/gunny.png")
+	gunSprites:setFilter("nearest", "nearest")
+	local grid = anim8.newGrid(32,32, gunSprites:getWidth(), gunSprites:getHeight())
+	gunAnimation = anim8.newAnimation(grid("1-6", 1), 0.1, "pauseAtStart")
 	self.ammoCap = 6
 	self.reloadDuration = 0.5
 	self.aimLimit = 2
 	self.aimRadius = 100
 	self.minRadius = 10
-	self.shotCoolDownDuration = 0.3
+	self.shotCoolDownDuration = 0.2
 	self.bulletHoleTimeLimit = 2
 	self:initialiseGun()
 end
@@ -27,6 +34,7 @@ function Gun:initialiseGun()
 	self.bulletX = 0
 	self.bulletY = 0
 	self.bulletHoleVisible = false
+	self.bang = false
 end
 
 --[[ 
@@ -70,6 +78,7 @@ function Gun:shoot(x, y, button)
 		self.ammo = self.ammo - 1
 		self.inShotCoolDown = true
 		self.shotCoolDownTime = self.shotCoolDownDuration
+		self.bang = true
 	end
 end
 
@@ -96,6 +105,7 @@ function Gun:decreaseShotCoolDown(dt)
 		self.shotCoolDownTime = self.shotCoolDownTime - dt
 		if self.shotCoolDownTime <= 0 then
 			self.inShotCoolDown = false
+			self.bang = false
 		end
 	end
 end
@@ -122,6 +132,7 @@ function Gun:update(dt)
 	self:decreaseBulletHoleTime(dt)
 	self:decreaseAimTime(dt)
 	self:aim(dt)
+	gunAnimation:update(dt)
 	angle = angle + .5*math.pi * dt
 end
 
@@ -165,6 +176,14 @@ function Gun:draw()
 		self:drawCrosshair()
 	end
 	if self.bulletHoleVisible then self:drawBulletHole() end
+	if self.bang == false then gunAnimation:gotoFrame(1) end
+	gunAnimation:draw(
+		gunSprites,
+		(scrnWidth / 2) - ((gunSprites:getWidth() / 6) * 2),
+		scrnHeight - (gunSprites:getHeight() * 4),
+		nil,
+		4
+	)
 end
 
 return Gun

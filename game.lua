@@ -1,5 +1,5 @@
 local love = require("love")
-local cron = require("cron")
+local cron = require("libraries/cron")
 local State = require("state")
 local Colours = require("components/colours")
 
@@ -92,9 +92,7 @@ end
 function Game:incrementTargetTimer(dt)
 	if #targets > 0 then
 		self.targetCurrentTime = self.targetCurrentTime + dt
-		if self.targetCurrentTime >= self.targetTimer then
-			self:removeTargets()
-		end
+		self:removeTargets()
 	end
 end
 
