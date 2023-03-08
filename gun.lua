@@ -34,6 +34,7 @@ function Gun:initialiseGun()
 	self.bulletX = 0
 	self.bulletY = 0
 	self.bulletHoleVisible = false
+	self.reloadAnimation = 0
 end
 
 --[[ 
@@ -90,10 +91,15 @@ end
 function Gun:reload(dt)
 	if self.reloading and self.ammo < self.ammoCap and self.aiming == false then
 		self.reloadKeyDown = self.reloadKeyDown + dt
+		if self.reloadAnimation < 100 then
+			self.reloadAnimation = self.reloadAnimation + 5
+		end
 		if self.reloadKeyDown >= self.reloadDuration then
 			self.ammo = self.ammo + 1
 			self.reloadKeyDown = 0
 		end
+	elseif self.reloadAnimation > 0 and self.reloading == false then
+		self.reloadAnimation = self.reloadAnimation - 5
 	end
 end
 
@@ -177,7 +183,7 @@ function Gun:draw()
 	gunAnimation:draw(
 		gunSprites,
 		(scrnWidth / 2) - ((gunSprites:getWidth() / 6) * 2),
-		scrnHeight - (gunSprites:getHeight() * 4),
+		scrnHeight - (gunSprites:getHeight() * 4) + self.reloadAnimation,
 		nil,
 		4
 	)
