@@ -22,26 +22,25 @@ local targetPoints = 10
 ]]--
 function Game:load()
 	math.randomseed(os.time()) -- random number seeding is required to position targets
-
-	self.targetCoolDownTime = 3
-	self.targetTimer = 4
-	self.minTargets = 1
-	self.maxTargets = 3
-	self.minRadius = 60
-	self.maxRadius = 80
-	self.pointsTimerLimit = 2
+	self.timer = cron.every(1, function() self.seconds = self.seconds - 1 end)
 	self:initialiseGame()
 end
 
 function Game:initialiseGame()
 	self.score = 0
 	self.seconds = 60
-	self.timer = cron.every(1, function() self.seconds = self.seconds - 1 end)
 	self.targetCurrentTime = 0
+	self.targetCoolDownTime = 3
 	self.targetCoolDown = self.targetCoolDownTime
 	self.finished = false
 	self.currentPoints = nil
 	self.pointsYAnimate = 0
+	self.targetTimer = 4
+	self.minTargets = 1
+	self.maxTargets = 3
+	self.minRadius = 60
+	self.maxRadius = 80
+	self.pointsTimerLimit = 2
 end
 
 -- TARGET HANDLERS --
@@ -122,7 +121,7 @@ function Game:outerHit(x, y, i)
 end
 -- the score scales depending on which "ring" of the target was hit
 function Game:checkHit(x, y)
-	for i=#targets, 1, -1 do
+	for i = #targets, 1, -1 do
 		if self:targetHit(x, y, i) then
 			if self:bullseyeHit(x, y, i) then
 				self.score = self.score + bullseyePoints
