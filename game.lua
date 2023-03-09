@@ -203,12 +203,15 @@ function Game:update(dt)
 	self:createTargets(dt)
 	self:incrementTargetTimer(dt)
 	self:decrementTargetCountdown(dt)
-	self:increaseDifficulty(dt)
+	self:increaseDifficulty()
 	self:decrementPointsTimer(dt)
 end
 
 -- DRAW FUNCTIONS --
 
+-- This draws the targets, the goto continue if statement is a lua workaround
+-- Basically, until the countdown on each target ticks down to 0, we don't want
+-- it to be drawn so we can get a sequential pop-in effect
 function Game:drawGameTargets()
 	for _,target in pairs(targets) do
 		if target.countdown > 0 then goto continue end

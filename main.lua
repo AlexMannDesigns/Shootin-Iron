@@ -5,6 +5,7 @@ local Hud = require("hud")
 local Menu = require("menu")
 local Score = require("score")
 local State = require("state")
+local Colours = require("components/colours")
 
 --[[ GLOBAL VARS ]]--
 
@@ -26,10 +27,16 @@ Keys.aimButton = 2
 -- Make it pretty
 	-- Add a background
 	-- create custom menu cursor (spinning crosshair?)
+
+local lg = love.graphics
+local background = nil
+
 -- MAIN FUNCTIONS --
 
 -- called when the game starts. Handles all the setup stuff
 function love.load()
+	background = lg.newImage("assets/background.png")
+	background:setFilter("nearest", "nearest")
 	State:load()
 	Game:load()
 	Gun:load()
@@ -52,7 +59,9 @@ end
 
 -- called 60 times per second. Handles graphical elements of the game
 function love.draw()
-	love.graphics.setBackgroundColor(love.math.colorFromBytes(255,186,8)) --placeholder
+	lg.setBackgroundColor(love.math.colorFromBytes(255,186,8)) --placeholder
+	Colours:set(Colours.white, 1)
+	lg.draw(background, 0, 0, 0, 2)
 	if State.inGame then
 		Game:draw()
 		Gun:draw()
