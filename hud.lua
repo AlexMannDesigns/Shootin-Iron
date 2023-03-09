@@ -1,25 +1,46 @@
 local love = require("love")
+local anim8 = require("libraries/anim8")
 local Game = require("game")
 local Gun = require("gun")
 local Colours = require("components/colours")
-local Text = require("components/text")
 
 local Hud = {}
 local lg = love.graphics
+local hourGlassSprites, hourGlassAnimation
+local scrnWidth, scrnHeight = lg.getDimensions()
+local alpha = 1
 
 function Hud:load()
+	hourGlassSprites = lg.newImage("assets/hourglass.png")
+	hourGlassSprites:setFilter("nearest", "nearest")
+	local grid = anim8.newGrid(32,32, hourGlassSprites:getWidth(), hourGlassSprites:getHeight())
+	hourGlassAnimation = anim8.newAnimation(grid("1-6", 1), 0.2)
 end
 
 function Hud:update(dt)
+	if Game.seconds > 50 then
+		hourGlassAnimation:gotoFrame(1)
+	elseif Game.seconds > 40 then
+		hourGlassAnimation:gotoFrame(2)
+	elseif Game.seconds > 30 then 
+		hourGlassAnimation:gotoFrame(3)
+	elseif Game.seconds > 20 then 
+		hourGlassAnimation:gotoFrame(4)
+	elseif Game.seconds > 10 then
+		hourGlassAnimation:gotoFrame(5)
+	else
+		hourGlassAnimation:gotoFrame(6)
+	end
+	hourGlassAnimation:update(dt)
 end
 
-function Hud:checkCursorHudOverlap(scrnWidth, scrnHeight)
+function Hud:checkCursorHudOverlap()
 	local x, y = love.mouse.getPosition()
 	return (x > scrnWidth * 0.8 and y > scrnHeight * 0.8) or y < scrnHeight * 0.2
 end
 
 --gun.aimTime draws a rectangle on the screen to act as a stamina meter
-function Hud:drawAimMeter(scrnWidth, scrnHeight, alpha)
+function Hud:drawAimMeter()
 	Colours:set(Colours.white, alpha)
 	if Gun.aimTime > Gun.aimLimit * 0.8 then
 		Colours:set(Colours.lightRed, alpha)
@@ -34,7 +55,7 @@ function Hud:drawAimMeter(scrnWidth, scrnHeight, alpha)
 	Colours:set(Colours.white, 1)
 end
 
-function Hud:drawAmmo(scrnWidth, scrnHeight, alpha)
+function Hud:drawAmmo()
 	local bulletWidth = 30
 	local bulletHeight = 10
 	local bulletPadding = 3
@@ -50,13 +71,20 @@ function Hud:drawAmmo(scrnWidth, scrnHeight, alpha)
 end
 
 function Hud:draw()
-	local scrnWidth, scrnHeight = lg.getDimensions()
-	local alpha = 1
-	if self:checkCursorHudOverlap(scrnWidth, scrnHeight) then alpha = 0.2 end
-
-	Text(Game.seconds, scrnWidth - 150, 0, "h3", nil, nil, nil, nil, alpha, nil):draw()
-	if Gun.ammo > 0 then Hud:drawAmmo(scrnWidth, scrnHeight, alpha) end
-	if Gun.aimTime > 0 then Hud:drawAimMeter(scrnWidth, scrnHeight, alpha) end
+	if self:checkCursorHudOverlap() then
+		alpha = 0.2
+	else
+		alpha = 1
+	end
+	hourGlassAnimation:draw(
+		hourGlassSprites,
+		scrnWidth - 150,
+		20,
+		nil,
+		2
+	)
+	if Gun.ammo > 0 then Hud:drawAmmo() end
+	if Gun.aimTime > 0 then Hud:drawAimMeter() end
 end
 
 return Hud
