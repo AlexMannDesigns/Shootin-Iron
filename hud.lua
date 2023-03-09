@@ -36,7 +36,7 @@ end
 
 function Hud:checkCursorHudOverlap()
 	local x, y = love.mouse.getPosition()
-	return (x > scrnWidth * 0.8 and y > scrnHeight * 0.8) or y < scrnHeight * 0.2
+	return (x > scrnWidth * 0.8 and y > scrnHeight * 0.8) or (x < scrnWidth * 0.2 and y > scrnHeight * 0.8)
 end
 
 --gun.aimTime draws a rectangle on the screen to act as a stamina meter
@@ -56,7 +56,7 @@ function Hud:drawAimMeter()
 end
 
 function Hud:drawAmmo()
-	local bulletWidth = 30
+	local bulletWidth = 25
 	local bulletHeight = 10
 	local bulletPadding = 3
 	local x = scrnWidth - 90
@@ -64,6 +64,7 @@ function Hud:drawAmmo()
 
 	Colours:set(Colours.gold, alpha)
 	for i=1,Gun.ammo, 1 do
+		lg.circle("fill", x + bulletWidth, y + bulletHeight / 2, bulletHeight / 2)
 		lg.rectangle("fill", x, y, bulletWidth, bulletHeight)
 		y = y - bulletHeight - bulletPadding
 	end
@@ -76,10 +77,11 @@ function Hud:draw()
 	else
 		alpha = 1
 	end
+	lg.setColor(1,1,1,alpha)
 	hourGlassAnimation:draw(
 		hourGlassSprites,
-		scrnWidth - 150,
-		20,
+		30,
+		scrnHeight - hourGlassSprites:getHeight() - 60,
 		nil,
 		2
 	)
