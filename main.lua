@@ -19,7 +19,6 @@ Keys.aimButton = 2
 -- Menu screen when the game starts - Done but needs improving
 -- figure out how to embed the game online somewhere - download link to exec might be easier
 -- targets should appear one by one, add an appear effect
--- Display timer as an hourglass
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add an easter egg
 	-- Monkey that runs around the screen and takes you to a 'you lose' screen if you shoot it

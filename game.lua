@@ -57,6 +57,7 @@ function Game:addTarget()
 		radius = math.random(self.minRadius, self.maxRadius),
 		x = nil,
 		y = nil,
+		countdown = #targets * 0.2,
 		colour = Colours:getTargetColour()
 	}
 	self:positionTarget(targets[#targets])
@@ -188,11 +189,20 @@ function Game:decrementPointsTimer(dt)
 	end
 end
 
+function Game:decrementTargetCountdown(dt)
+	for _,target in pairs(targets) do
+		if target.countdown > 0 then
+			target.countdown = target.countdown - dt
+		end
+	end
+end
+
 function Game:update(dt)
 	self.timer:update(dt)
 	self:checkGameEnd()
 	self:createTargets(dt)
 	self:incrementTargetTimer(dt)
+	self:decrementTargetCountdown(dt)
 	self:increaseDifficulty(dt)
 	self:decrementPointsTimer(dt)
 end
@@ -201,6 +211,7 @@ end
 
 function Game:drawGameTargets()
 	for _,target in pairs(targets) do
+		if target.countdown > 0 then goto continue end
 		Colours:set(target.colour, alpha)
 		lg.circle("fill", target.x, target.y, target.radius)
 		Colours:set(Colours.white, alpha)
@@ -209,6 +220,7 @@ function Game:drawGameTargets()
 		lg.circle("fill", target.x, target.y, target.radius * inner)
 		Colours:set(Colours.white, alpha)
 		lg.circle("fill", target.x, target.y, target.radius * bullseye)
+		::continue::
 	end
 end
 
