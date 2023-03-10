@@ -29,7 +29,12 @@ function Button(func, textX, textY, buttonX, buttonY, textColour, buttonColour, 
 		end,
 
 		draw = function(self)
+			local mouseX, mouseY = love.mouse.getPosition()
 			Colours:set(buttonColour, alpha)
+			if mouseX >= self.buttonX and mouseX <= self.buttonX + self.width and
+					mouseY >= self.buttonY and mouseY <= self.buttonY + self.height then
+				Colours:set(Colours.lightYellow, alpha)
+			end
 			lg.rectangle("fill", self.buttonX, self.buttonY, self.width, self.height)
 			Text(text, btnText.x, btnText.y, "h5", nil, nil, nil, nil, alpha, textColour):draw()
 			lg.setColor(1,1,1)

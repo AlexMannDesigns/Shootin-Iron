@@ -8,7 +8,6 @@ local Menu = {}
 local lg = love.graphics
 local scrnWidth, scrnHeight = lg.getDimensions()
 local myFont = lg.newFont("assets/Carnevalee Freakshow.ttf", 100)
-local angle = 0
 
 function Menu:load()
 	self.funcs = {
