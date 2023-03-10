@@ -19,17 +19,16 @@ Keys.aimButton = 2
 --[[ TODO ]]--
 -- Menu screen when the game starts - Done but needs improving
 -- figure out how to embed the game online somewhere - download link to exec might be easier
--- targets should appear one by one, add an appear effect
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add an easter egg
 	-- Monkey that runs around the screen and takes you to a 'you lose' screen if you shoot it
 -- Add sounds (gunshot, reload, ricochets, hammer click)
 -- Make it pretty
-	-- Add a background
 	-- create custom menu cursor (spinning crosshair?)
 
 local lg = love.graphics
 local background = nil
+local angle = 0 --for calculating spin of cursor
 
 -- MAIN FUNCTIONS --
 
@@ -37,6 +36,7 @@ local background = nil
 function love.load()
 	background = lg.newImage("assets/background.png")
 	background:setFilter("nearest", "nearest")
+	love.mouse.setVisible(false)
 	State:load()
 	Game:load()
 	Gun:load()
@@ -47,6 +47,7 @@ end
 
 -- called 60 times per second. Handles the main game loop
 function love.update(dt)
+	angle = angle + .5*math.pi * dt
 	if State.inGame then
 		if Game.finished then GameOver() end
 		Game:update(dt)
@@ -64,12 +65,12 @@ function love.draw()
 	lg.draw(background, 0, 0, 0, 2)
 	if State.inGame then
 		Game:draw()
-		Gun:draw()
+		Gun:draw(angle)
 		Hud:draw()
 	elseif State.mainMenu then
-		Menu:draw()
+		Menu:draw(angle)
 	elseif State.score then
-		Score:draw()
+		Score:draw(angle)
 	end
 end
 

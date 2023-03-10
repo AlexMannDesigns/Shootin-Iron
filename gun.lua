@@ -6,7 +6,6 @@ local Colours = require("components/colours")
 local Gun = {}
 local lg = love.graphics
 local alpha = 1
-local angle = 0
 local gunSprites, gunAnimation
 local scrnWidth, scrnHeight = lg.getDimensions()
 
@@ -137,7 +136,6 @@ function Gun:update(dt)
 	self:aim(dt)
 	if self.inShotCoolDown == false then gunAnimation:gotoFrame(1) end
 	gunAnimation:update(dt)
-	angle = angle + .5*math.pi * dt
 end
 
 function Gun:currentAimRadius()
@@ -156,7 +154,7 @@ function Gun:drawBulletHole()
 	Colours:set(Colours.white, alpha)
 end
 
-function Gun:drawCrosshair()
+function Gun:drawCrosshair(angle)
 	local x, y = love.mouse.getPosition()
 	Colours:set(Colours.indigo, alpha)
 	lg.push()
@@ -175,9 +173,9 @@ function Gun:drawCrosshair()
 	Colours:set(Colours.white, alpha)
 end
 
-function Gun:draw()
+function Gun:draw(angle)
 	if self.reloading == false and self.inShotCoolDown == false then
-		self:drawCrosshair()
+		self:drawCrosshair(angle)
 	end
 	if self.bulletHoleVisible then self:drawBulletHole() end
 	gunAnimation:draw(

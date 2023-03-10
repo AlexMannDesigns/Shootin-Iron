@@ -16,13 +16,11 @@ end
 
 function State:startGame()
 	self:clear()
-	love.mouse.setVisible(false)
 	self.inGame = true
 end
 
 function State:endGame()
 	self:clear()
-	love.mouse.setVisible(true)
 	self.score = true
 end
 

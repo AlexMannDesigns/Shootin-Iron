@@ -15,13 +15,13 @@ function Button(func, textX, textY, buttonX, buttonY, textColour, buttonColour, 
 	if textX then btnText.x = textX + buttonX end
 
 	return {
-		textColour = textColour or {r = 0, g = 0, b = 0},
-		buttonColour = buttonColour or {r = 1, g = 1, b = 1},
+		textColour = textColour or Colours.black,
+		buttonColour = buttonColour or Colours.white,
 		width = width or 200,
 		height = height or 100,
 
-		buttonX = buttonX or 0, 
-		buttonY = buttonY or 0, 
+		buttonX = buttonX or 0,
+		buttonY = buttonY or 0,
 
 		text = text or "No text added",
 		clicked = function()
@@ -29,13 +29,12 @@ function Button(func, textX, textY, buttonX, buttonY, textColour, buttonColour, 
 		end,
 
 		draw = function(self)
-			lg.setColor(self.buttonColour["r"], self.buttonColour["g"], self.buttonColour["b"])
+			Colours:set(buttonColour, alpha)
 			lg.rectangle("fill", self.buttonX, self.buttonY, self.width, self.height)
-			lg.setColor(self.textColour["r"], self.textColour["g"], self.textColour["b"])
-			Text(text, btnText.x, btnText.y, "h5", nil, nil, nil, nil, alpha, Colours.black):draw()
+			Text(text, btnText.x, btnText.y, "h5", nil, nil, nil, nil, alpha, textColour):draw()
 			lg.setColor(1,1,1)
 		end
 	}
 end
 
-return Button 
+return Button

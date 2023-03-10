@@ -7,6 +7,7 @@ local State = require("state")
 local Text = require("components/text")
 local Colours = require("components/colours")
 local Button = require("components/button")
+local MenuCursor = require("components/menucursor")
 
 local GAME_OVER = "GAME OVER"
 local YOUR_SCORE = "Your score: "
@@ -25,8 +26,8 @@ function Score:load()
 		quit = function() love.event.quit() end
 	}
 	self.buttons = {
-		Button(self.funcs.restart, 20, 30, (scrnWidth / 4), (scrnHeight / 4) * 3, nil, nil, nil, nil, "restart"),
-		Button(self.funcs.quit, 20, 30, (scrnWidth / 4) + 220, (scrnHeight / 4) * 3, nil, nil, nil, nil, "quit")
+		Button(self.funcs.restart, 20, 15, (scrnWidth / 4), (scrnHeight / 4) * 3, Colours.indigo, Colours.darkYellow, nil, nil, "Restart"),
+		Button(self.funcs.quit, 50, 15, (scrnWidth / 4) + 220, (scrnHeight / 4) * 3, Colours.indigo, Colours.darkYellow, nil, nil, "Quit")
 	}
 end
 
@@ -44,14 +45,15 @@ function Score:update(dt)
 	self:incrementCounter()
 end
 
-function Score:draw()
-	local font = lg.newFont(50)
-	Text(GAME_OVER, 0, (scrnHeight / 4) - font:getHeight(), "h2", nil, nil, nil, "center", 1, Colours.white):draw()
-	font = lg.newFont(30)
-	Text(YOUR_SCORE .. self.counter, 0, (scrnHeight / 2) - font:getHeight(), "h4", nil, nil, nil, "center", 1, Colours.white):draw()
+function Score:draw(angle)
+	local font = lg.newFont("assets/Carnevalee Freakshow.ttf", 100)
+	Text(GAME_OVER, 0, (scrnHeight / 4) - font:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
+	font = lg.newFont("assets/duality.otf", 30)
+	Text(YOUR_SCORE .. self.counter, 0, (scrnHeight / 2) - font:getHeight(), "h4", nil, nil, nil, "center", 1, Colours.indigo):draw()
 	for _, btn in pairs(self.buttons) do
 		btn:draw()
 	end
+	MenuCursor(angle):draw()
 end
 
 function Score:checkClicked(x, y, mouseButton)
