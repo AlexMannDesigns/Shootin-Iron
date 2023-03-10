@@ -49,7 +49,8 @@ function Score:draw(angle)
 	local font = lg.newFont("assets/Carnevalee Freakshow.ttf", 100)
 	Text(GAME_OVER, 0, (scrnHeight / 4) - font:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
 	font = lg.newFont("assets/duality.otf", 30)
-	Text(YOUR_SCORE .. self.counter, 0, (scrnHeight / 2) - font:getHeight(), "h4", nil, nil, nil, "center", 1, Colours.indigo):draw()
+	Text(YOUR_SCORE, scrnWidth / 5, (scrnHeight / 2) - font:getHeight(), "h4", nil, nil, nil, "left", 1, Colours.indigo):draw()
+	Text(self.counter, (scrnWidth / 5) + 300, (scrnHeight / 2) - font:getHeight(), "h4", nil, nil, nil, "left", 1, Colours.indigo):draw()
 	for _, btn in pairs(self.buttons) do
 		btn:draw()
 	end

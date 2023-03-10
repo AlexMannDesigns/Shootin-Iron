@@ -12,7 +12,7 @@ function Instructions()
 	return {
 		draw = function(self)
 			local instFont = lg.newFont("assets/duality.otf", 50)
-			Colours:set(Colours.black, 0.4)
+			Colours:set(Colours.black, 0.6)
 			lg.rectangle("fill", 0, 0, scrnWidth, scrnHeight)
 			Colours:set(Colours.white, alpha)
 			Text(
