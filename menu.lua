@@ -47,6 +47,7 @@ end
 
 function Menu:draw(angle)
 	Text("Shootin' Iron", 0, (scrnHeight / 4) - titleFont:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
+	Text("By Alexander Mann", 0, (scrnHeight / 4), "h7", nil, nil, nil, "center", 1, Colours.darkRed):draw()
 	Colours:set(Colours.white, 1)
 	for _, btn in pairs(self.buttons) do
 		btn:draw()
@@ -61,7 +62,7 @@ function Menu:draw(angle)
 		4
 	)
 	MenuCursor(angle):draw()
-	Text("To display instructions, press 'i' at any time", 0, scrnHeight - 5 - instructionsFont:getHeight(), "h6", nil, nil, nil, "center", 1, Colours.white):draw()
+	Text("To display instructions, press 'i' at any time", 0, scrnHeight - 5 - instructionsFont:getHeight(), "h7", nil, nil, nil, "center", 1, Colours.white):draw()
 end
 
 function Menu:checkClicked(x, y, mouseButton)
