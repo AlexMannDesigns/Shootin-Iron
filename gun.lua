@@ -1,3 +1,4 @@
+
 local love = require("love")
 local anim8 = require("libraries/anim8")
 local Game = require("game")
@@ -8,6 +9,10 @@ local lg = love.graphics
 local alpha = 1
 local gunSprites, gunAnimation
 local scrnWidth, scrnHeight = lg.getDimensions()
+local gunshotSource = love.audio.newSource("assets/gunshot.mp3", "static")
+local dryshotSource = love.audio.newSource("assets/dryshot.mp3", "static")
+local dryshot = false
+local RELOAD_PROMPT = "(press and hold 'space' to reload)"
 
 function Gun:load()
 	gunSprites = lg.newImage("assets/gunny.png")
@@ -34,6 +39,7 @@ function Gun:initialiseGun()
 	self.bulletY = 0
 	self.bulletHoleVisible = false
 	self.reloadAnimation = 0
+	self.displayReloadPrompt = false
 end
 
 --[[ 
@@ -70,6 +76,8 @@ end
 
 function Gun:shoot(x, y, button)
 	if self:playerCanShoot(button) then
+		love.audio.stop(gunshotSource)
+		love.audio.play(gunshotSource)
 		self.bulletX, self.bulletY = self:randomiseShot(x, y)
 		self.bulletHoleVisible = true
 		self.bulletHoleTime = self.bulletHoleTimeLimit
@@ -77,6 +85,15 @@ function Gun:shoot(x, y, button)
 		self.ammo = self.ammo - 1
 		self.inShotCoolDown = true
 		self.shotCoolDownTime = self.shotCoolDownDuration
+	elseif button == Keys.shootButton and self.ammo == 0 then
+		love.audio.stop(dryshotSource)
+		love.audio.play(dryshotSource)
+		if dryshot == false then
+			dryshot = true
+		else
+			self.displayReloadPrompt = true
+			dryshot = false
+		end
 	end
 end
 
@@ -89,6 +106,7 @@ end
 ]]--
 function Gun:reload(dt)
 	if self.reloading and self.ammo < self.ammoCap and self.aiming == false then
+		if self.displayReloadPrompt then self.displayReloadPrompt = false end
 		self.reloadKeyDown = self.reloadKeyDown + dt
 		if self.reloadAnimation < 100 then
 			self.reloadAnimation = self.reloadAnimation + 5
@@ -138,6 +156,21 @@ function Gun:update(dt)
 	gunAnimation:update(dt)
 end
 
+function Gun:displayReloadPromptText()
+	local promptFont = lg.newFont("assets/duality.otf", 50)
+	Text(
+		RELOAD_PROMPT,
+		0,
+		(scrnHeight / 3) - promptFont:getHeight(),
+		"p",
+		nil,
+		nil,
+		nil,
+		"center",
+		1,
+		Colours.indigo):draw()
+end
+
 function Gun:currentAimRadius()
 	local radius
 	if self.aiming and self.aimTime < self.aimLimit then
@@ -185,6 +218,9 @@ function Gun:draw(angle)
 		nil,
 		4
 	)
+	if self.displayReloadPrompt then
+		self:displayReloadPromptText()
+	end
 end
 
 return Gun

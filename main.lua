@@ -1,9 +1,14 @@
+-- gunshot sounds royalty free from https://www.fesliyanstudios.com/royalty-free-sound-effects-download/gun-shooting-300
+-- title font https://www.dafont.com/carnivalee-freakshow.font
+-- text font https://www.dafont.com/duality.font
+
 local love = require("love")
 local Game = require("game")
 local Gun = require("gun")
 local Hud = require("hud")
 local Menu = require("menu")
 local Score = require("score")
+--local Instructions = require("instructions")
 local State = require("state")
 local Colours = require("components/colours")
 
@@ -17,14 +22,10 @@ Keys.shootButton = 1
 Keys.aimButton = 2
 
 --[[ TODO ]]--
--- Menu screen when the game starts - Done but needs improving
 -- figure out how to embed the game online somewhere - download link to exec might be easier
 -- Power ups (faster reload, higher capacity, rapid fire)
 -- Add an easter egg
-	-- Monkey that runs around the screen and takes you to a 'you lose' screen if you shoot it
 -- Add sounds (gunshot, reload, ricochets, hammer click)
--- Make it pretty
-	-- create custom menu cursor (spinning crosshair?)
 
 local lg = love.graphics
 local background = nil
@@ -60,6 +61,9 @@ end
 
 -- called 60 times per second. Handles graphical elements of the game
 function love.draw()
+--	if love.keyboard.isDown("i") then
+--		Instructions():draw()
+	--end
 	lg.setBackgroundColor(love.math.colorFromBytes(255,186,8)) --placeholder
 	Colours:set(Colours.white, 1)
 	lg.draw(background, 0, 0, 0, 2)

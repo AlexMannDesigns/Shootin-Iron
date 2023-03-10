@@ -8,6 +8,7 @@ local Menu = {}
 local lg = love.graphics
 local scrnWidth, scrnHeight = lg.getDimensions()
 local myFont = lg.newFont("assets/Carnevalee Freakshow.ttf", 100)
+local TITLE = ""
 
 function Menu:load()
 	self.funcs = {
@@ -26,6 +27,7 @@ function Menu:draw(angle)
 	for _, btn in pairs(self.buttons) do
 		btn:draw()
 	end
+	Text("Wild Wild West", 0, (scrnHeight / 4) - myFont:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
 	MenuCursor(angle):draw()
 end
 
