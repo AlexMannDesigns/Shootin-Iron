@@ -8,7 +8,7 @@ local Gun = require("gun")
 local Hud = require("hud")
 local Menu = require("menu")
 local Score = require("score")
---local Instructions = require("instructions")
+local Instructions = require("instructions")
 local State = require("state")
 local Colours = require("components/colours")
 
@@ -61,9 +61,6 @@ end
 
 -- called 60 times per second. Handles graphical elements of the game
 function love.draw()
---	if love.keyboard.isDown("i") then
---		Instructions():draw()
-	--end
 	lg.setBackgroundColor(love.math.colorFromBytes(255,186,8)) --placeholder
 	Colours:set(Colours.white, 1)
 	lg.draw(background, 0, 0, 0, 2)
@@ -75,6 +72,9 @@ function love.draw()
 		Menu:draw(angle)
 	elseif State.score then
 		Score:draw(angle)
+	end
+	if love.keyboard.isDown("i") then
+		Instructions():draw()
 	end
 end
 

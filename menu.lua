@@ -7,8 +7,9 @@ local State = require("state")
 local Menu = {}
 local lg = love.graphics
 local scrnWidth, scrnHeight = lg.getDimensions()
-local myFont = lg.newFont("assets/Carnevalee Freakshow.ttf", 100)
 local TITLE = ""
+local titleFont = lg.newFont("assets/Carnevalee Freakshow.ttf", 100)
+local instructionsFont = lg.newFont("assets/duality.otf", 30)
 
 function Menu:load()
 	self.funcs = {
@@ -22,13 +23,15 @@ function Menu:load()
 end
 
 function Menu:draw(angle)
-	Text("Wild Wild West", 0, (scrnHeight / 4) - myFont:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
+	
+	Text("Wild Wild West", 0, (scrnHeight / 4) - titleFont:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
 	Colours:set(Colours.white, 1)
 	for _, btn in pairs(self.buttons) do
 		btn:draw()
 	end
-	Text("Wild Wild West", 0, (scrnHeight / 4) - myFont:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
+	Text("Wild Wild West", 0, (scrnHeight / 4) - titleFont:getHeight(), "h1", nil, nil, nil, "center", 1, Colours.indigo):draw()
 	MenuCursor(angle):draw()
+	Text("To display instructions, press 'i' at any time", 0, scrnHeight - 5 - instructionsFont:getHeight(), "h6", nil, nil, nil, "center", 1, Colours.white):draw()
 end
 
 function Menu:checkClicked(x, y, mouseButton)

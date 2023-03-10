@@ -161,14 +161,14 @@ function Gun:displayReloadPromptText()
 	Text(
 		RELOAD_PROMPT,
 		0,
-		(scrnHeight / 3) - promptFont:getHeight(),
+		(scrnHeight / 6) - promptFont:getHeight(),
 		"p",
 		nil,
 		nil,
 		nil,
 		"center",
 		1,
-		Colours.indigo):draw()
+		Colours.darkRed):draw()
 end
 
 function Gun:currentAimRadius()

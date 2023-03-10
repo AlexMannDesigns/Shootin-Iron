@@ -19,7 +19,7 @@ function Text(text, x, y, fontSize, fadeIn, fadeOut, wrapWidth, align, opacity, 
 		h3 = lg.newFont("assets/duality.otf", 80),
 		h4 = lg.newFont("assets/duality.otf", 70),
 		h5 = lg.newFont("assets/duality.otf", 60),
-		h6 = lg.newFont("assets/duality.otf", 40),
+		h6 = lg.newFont("assets/duality.otf", 30),
 		p = lg.newFont("assets/duality.otf", 50),
 	}
 
