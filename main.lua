@@ -54,6 +54,8 @@ function love.update(dt)
 		Game:update(dt)
 		Gun:update(dt)
 		Hud:update(dt)
+	elseif State.mainMenu then
+		Menu:update(dt)
 	elseif State.score then
 		Score:update(dt)
 	end

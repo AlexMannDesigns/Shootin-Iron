@@ -1,4 +1,3 @@
-
 local love = require("love")
 local anim8 = require("libraries/anim8")
 local Game = require("game")
